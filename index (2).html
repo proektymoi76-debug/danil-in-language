@@ -1,0 +1,4364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>danil in language</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-deep: #171721;
+    --bg-base: #1e1e2a;
+    --accent: #5266eb;
+    --accent-dim: rgba(82, 102, 235, 0.18);
+    --text: #ededf3;
+    --text-dim: rgba(237, 237, 243, 0.5);
+    --text-mid: rgba(237, 237, 243, 0.75);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Background photo layer */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat;
+    transform-origin: center center;
+    transition: transform 0s, opacity 0s;
+    will-change: transform, opacity;
+  }
+
+  /* Dark overlay on top of photo */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(23, 23, 33, 0.45) 0%,
+      rgba(23, 23, 33, 0.25) 40%,
+      rgba(23, 23, 33, 0.65) 100%
+    );
+    transition: background 0s;
+    will-change: background;
+    z-index: 1;
+  }
+
+  /* Scroll-triggered darkening veil */
+  .hero-veil {
+    position: absolute;
+    inset: 0;
+    background: #171721;
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+    will-change: opacity;
+  }
+
+  /* Hero content */
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    text-align: center;
+    padding: 0 24px;
+  }
+
+  /* Notebook SVG scene */
+  .notebook-scene {
+    width: 320px;
+    margin-bottom: 40px;
+    transform-origin: center bottom;
+    transition: transform 0s;
+    will-change: transform;
+    filter: drop-shadow(0 32px 64px rgba(0,0,0,0.7));
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 10px;
+  }
+
+  .hero-title span {
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 30%, #a8b4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.2vw, 1.3rem);
+    font-weight: 300;
+    color: var(--text-mid);
+    letter-spacing: 0.01em;
+    margin-bottom: 44px;
+    max-width: 440px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 16px 38px;
+    border-radius: 32px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 40px rgba(82, 102, 235, 0.4), 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .btn-primary:hover {
+    background: #6275f0;
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(82, 102, 235, 0.55), 0 12px 32px rgba(0,0,0,0.4);
+  }
+  .btn-primary svg { flex-shrink: 0; }
+
+  .btn-reset-diag {
+    display: block;
+    margin: 18px auto 0;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    padding: 6px 10px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(237,237,243,0.25);
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+  .btn-reset-diag:hover {
+    color: var(--text);
+    text-decoration-color: var(--accent);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+  .scroll-hint .arrow {
+    width: 18px;
+    height: 18px;
+    border-right: 1.5px solid rgba(237,237,243,0.35);
+    border-bottom: 1.5px solid rgba(237,237,243,0.35);
+    transform: rotate(45deg);
+  }
+  @keyframes breathe {
+    0%, 100% { opacity: 0.35; transform: translateX(-50%) translateY(0); }
+    50% { opacity: 0.7; transform: translateX(-50%) translateY(5px); }
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  #main {
+    background: var(--bg-deep);
+    position: relative;
+    z-index: 20;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 22px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.5s, backdrop-filter 0.5s;
+  }
+  nav.scrolled {
+    background: rgba(23,23,33,0.85);
+    backdrop-filter: blur(16px);
+  }
+
+  .nav-logo {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-mid);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-profile-link {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(237,237,243,0.15);
+    background: rgba(237,237,243,0.04);
+    color: var(--text-mid) !important;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+  }
+  .nav-profile-link:hover {
+    border-color: rgba(82,102,235,0.5);
+    background: rgba(82,102,235,0.1);
+    color: var(--text) !important;
+  }
+
+  /* ─── SECTION: PATHS ─── */
+  .section-paths {
+    padding: 120px 48px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 64px;
+    max-width: 560px;
+  }
+  .section-title strong { font-weight: 700; }
+
+  .paths-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .path-card {
+    background: var(--bg-base);
+    border: 1px solid rgba(237,237,243,0.07);
+    border-radius: 20px;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: border-color 0.25s, transform 0.25s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  .path-card:hover {
+    border-color: rgba(82,102,235,0.4);
+    transform: translateY(-4px);
+  }
+
+  .path-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-dim);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .path-title {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .path-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.65;
+    font-weight: 400;
+  }
+
+  .path-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(237,237,243,0.07);
+  }
+  .path-meta .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ─── SECTION: STATS ─── */
+  .section-stats {
+    padding: 80px 48px;
+    background: var(--bg-base);
+  }
+  .stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .stat-item {
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stat-num {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--text);
+  }
+  .stat-num em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  /* ─── SECTION: HOW ─── */
+  .section-how {
+    padding: 120px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    margin-top: 64px;
+  }
+
+  .how-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .how-step {
+    display: flex;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(237,237,243,0.07);
+    cursor: pointer;
+    transition: padding-left 0.2s;
+  }
+  .how-step:first-child { padding-top: 0; }
+  .how-step:last-child { border-bottom: none; }
+  .how-step:hover { padding-left: 8px; }
+
+  .step-num {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+    padding-top: 3px;
+    width: 28px;
+  }
+
+  .step-body {}
+  .step-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  /* Terminal-style showcase */
+  .how-visual {
+    background: #0d0d14;
+    border: 1px solid rgba(237,237,243,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    position: sticky;
+    top: 100px;
+  }
+  .terminal-bar {
+    padding: 14px 20px;
+    background: rgba(237,237,243,0.04);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(237,237,243,0.06);
+  }
+  .terminal-dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+  }
+  .terminal-dot.r { background: #ff5f57; }
+  .terminal-dot.y { background: #febc2e; }
+  .terminal-dot.g { background: #28c840; }
+
+  .terminal-body {
+    padding: 28px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  .t-comment { color: rgba(237,237,243,0.25); }
+  .t-key { color: #a8b4ff; }
+  .t-val { color: #89d6a8; }
+  .t-accent { color: #f4a261; }
+  .t-dim { color: var(--text-dim); }
+  .t-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--accent);
+    vertical-align: middle;
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ─── SECTION: TESTIMONIALS ─── */
+  .section-testimonials {
+    padding: 80px 0 120px;
+    background: var(--bg-base);
+  }
+  .test-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* ── Carousel wrapper ── */
+  .carousel-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 64px;
+  }
+
+  .carousel-viewport {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.45s cubic-bezier(0.77, 0, 0.175, 1);
+    will-change: transform;
+  }
+
+  /* each card fixed width so 3 fit */
+  .test-card {
+    background: #272735;
+    border: 1px solid rgba(237,237,243,0.08);
+    border-radius: 20px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-shrink: 0;
+    /* width set by JS */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .test-quote {
+    font-size: 15px;
+    line-height: 1.72;
+    color: var(--text-mid);
+    font-weight: 400;
+    font-style: italic;
+    flex: 1;
+  }
+  .test-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .test-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .test-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .test-meta {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* Grab cursor for drag */
+  .carousel-viewport {
+    cursor: grab;
+  }
+  .carousel-viewport.dragging {
+    cursor: grabbing;
+  }
+
+  @media (max-width: 900px) {
+    .test-inner { padding: 0 16px; }
+  }
+
+  /* ─── CTA ─── */
+  .section-cta {
+    padding: 120px 48px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .cta-title {
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .cta-title strong { font-weight: 700; }
+  .cta-sub {
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-bottom: 44px;
+    line-height: 1.6;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid rgba(237,237,243,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  /* ─── REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .paths-grid { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .how-grid { grid-template-columns: 1fr; gap: 48px; }
+    .how-visual { position: static; }
+    .test-grid { grid-template-columns: 1fr; }
+    .section-paths, .section-how, .section-cta, footer { padding-left: 24px; padding-right: 24px; }
+    .section-stats { padding-left: 24px; padding-right: 24px; }
+    .section-testimonials { padding-left: 24px; padding-right: 24px; }
+    .notebook-scene { width: 220px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">danil <em>in</em> language</a>
+  <ul class="nav-links">
+    <li><a href="#paths">Программы</a></li>
+    <li><a href="#how">Метод</a></li>
+    <li><a href="#testimonials">Отзывы</a></li>
+    <li><a href="javascript:Review.show()">Повторение</a></li>
+    <li><a href="#cta"><strong>Начать</strong></a></li>
+    <li>
+      <a href="javascript:Profile.show()" class="nav-profile-link" title="Личный кабинет" aria-label="Личный кабинет">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 15c0-2.76 2.46-5 5.5-5s5.5 2.24 5.5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay" id="heroOverlay"></div>
+  <div class="hero-veil" id="heroVeil"></div>
+
+  <div class="hero-content">
+    <!-- SVG Desk + Laptop scene -->
+    <svg class="notebook-scene" id="notebook" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Desk surface -->
+      <ellipse cx="160" cy="172" rx="148" ry="18" fill="#1a1a28" opacity="0.7"/>
+      <rect x="18" y="164" width="284" height="12" rx="4" fill="#22223a"/>
+      <!-- Table legs (subtle) -->
+      <rect x="40" y="175" width="8" height="22" rx="3" fill="#1a1a28" opacity="0.5"/>
+      <rect x="272" y="175" width="8" height="22" rx="3" fill="#1a1a28" opacity="0.5"/>
+
+      <!-- Laptop base -->
+      <rect x="72" y="138" width="176" height="28" rx="6" fill="#252538"/>
+      <rect x="76" y="141" width="168" height="22" rx="4" fill="#1e1e30"/>
+      <!-- Trackpad -->
+      <rect x="140" y="145" width="40" height="14" rx="4" fill="#2a2a40"/>
+      <!-- Hinge -->
+      <rect x="80" y="136" width="160" height="5" rx="2.5" fill="#2a2a40"/>
+
+      <!-- Laptop lid/screen -->
+      <rect x="80" y="36" width="160" height="102" rx="8" fill="#252538"/>
+      <!-- Screen bezel -->
+      <rect x="86" y="42" width="148" height="90" rx="5" fill="#0d0d18"/>
+      <!-- Screen glow -->
+      <rect x="88" y="44" width="144" height="86" rx="4" fill="url(#screenGrad)"/>
+
+      <!-- Screen content: code lines -->
+      <rect x="96" y="54" width="48" height="3" rx="1.5" fill="#5266eb" opacity="0.9"/>
+      <rect x="96" y="61" width="80" height="3" rx="1.5" fill="#a8b4ff" opacity="0.6"/>
+      <rect x="96" y="68" width="60" height="3" rx="1.5" fill="#89d6a8" opacity="0.6"/>
+      <rect x="96" y="75" width="96" height="3" rx="1.5" fill="#a8b4ff" opacity="0.4"/>
+      <rect x="96" y="82" width="40" height="3" rx="1.5" fill="#f4a261" opacity="0.6"/>
+      <rect x="96" y="89" width="72" height="3" rx="1.5" fill="#a8b4ff" opacity="0.5"/>
+      <rect x="96" y="96" width="56" height="3" rx="1.5" fill="#89d6a8" opacity="0.5"/>
+      <rect x="96" y="103" width="88" height="3" rx="1.5" fill="#a8b4ff" opacity="0.3"/>
+      <!-- Cursor -->
+      <rect x="96" y="110" width="6" height="10" rx="1" fill="#5266eb" opacity="0.9">
+        <animate attributeName="opacity" values="0.9;0;0.9" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+
+      <!-- Small lamp on desk -->
+      <rect x="232" y="148" width="5" height="22" rx="2" fill="#2a2a40"/>
+      <rect x="226" y="136" width="17" height="5" rx="2" fill="#2a2a40"/>
+      <ellipse cx="234" cy="136" rx="9" ry="5" fill="#3a3a5a"/>
+      <ellipse cx="234" cy="136" rx="6" ry="3" fill="#f4c842" opacity="0.5"/>
+
+      <!-- Coffee cup -->
+      <rect x="58" y="152" width="20" height="14" rx="3" fill="#2a2a40"/>
+      <rect x="60" y="154" width="16" height="10" rx="2" fill="#1e1e30"/>
+      <path d="M78 156 Q84 156 84 160 Q84 164 78 164" stroke="#2a2a40" stroke-width="2" fill="none"/>
+      <!-- Steam -->
+      <path d="M63 150 Q65 146 63 142" stroke="rgba(237,237,243,0.2)" stroke-width="1.5" fill="none" stroke-linecap="round">
+        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2s" repeatCount="indefinite"/>
+      </path>
+      <path d="M68 148 Q70 143 68 139" stroke="rgba(237,237,243,0.15)" stroke-width="1.5" fill="none" stroke-linecap="round">
+        <animate attributeName="opacity" values="0.15;0.45;0.15" dur="2.5s" repeatCount="indefinite"/>
+      </path>
+
+      <defs>
+        <linearGradient id="screenGrad" x1="88" y1="44" x2="232" y2="130" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1a1a2e"/>
+          <stop offset="50%" stop-color="#16213e"/>
+          <stop offset="100%" stop-color="#0f0f1a"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <p class="hero-eyebrow">Платформа для изучения английского</p>
+    <h1 class="hero-title">danil <span>in language</span></h1>
+    <p class="hero-sub">Английский язык — это не зубрёжка. Это система, логика и практика. Начни говорить свободно.</p>
+
+    <a href="#paths" class="btn-primary">
+      Начать учиться
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="arrow"></div>
+    Скролл
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- PATHS -->
+  <section class="section-paths" id="paths">
+    <p class="section-label reveal">Программы обучения</p>
+    <h2 class="section-title reveal">Выбери свой<br><strong>путь</strong></h2>
+
+    <div class="paths-grid">
+      <a href="#cta" class="path-card reveal" onclick="event.preventDefault();App.openProgramOrScroll('С нуля до разговорного')">
+        <div class="path-icon">🎯</div>
+        <div class="path-title">С нуля до разговора</div>
+        <div class="path-desc">Для тех, кто начинает с чистого листа. Система фонетики, базовая грамматика, первые диалоги.</div>
+        <div class="path-meta"><span class="dot"></span> 48 уроков · Начальный</div>
+      </a>
+      <a href="#cta" class="path-card reveal" onclick="event.preventDefault();App.openProgramOrScroll('Intermediate Boost')">
+        <div class="path-icon">🚀</div>
+        <div class="path-title">Intermediate Boost</div>
+        <div class="path-desc">Ломаем плато. Сложные времена, фразовые глаголы, живая речь носителей — без воды.</div>
+        <div class="path-meta"><span class="dot"></span> 60 уроков · Средний</div>
+      </a>
+      <a href="#cta" class="path-card reveal" onclick="event.preventDefault();App.openProgramOrScroll('Business English')">
+        <div class="path-icon">💼</div>
+        <div class="path-title">Business English</div>
+        <div class="path-desc">Переговоры, письма, презентации на английском. Для карьеры в международных компаниях.</div>
+        <div class="path-meta"><span class="dot"></span> 40 уроков · Продвинутый</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="section-stats">
+    <div class="stats-inner">
+      <div class="stat-item reveal">
+        <div class="stat-num">12<em>к+</em></div>
+        <div class="stat-label">студентов прошли обучение и заговорили свободно</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">3<em>мес</em></div>
+        <div class="stat-label">средний срок до уверенного разговора с нуля</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">98<em>%</em></div>
+        <div class="stat-label">студентов рекомендуют платформу друзьям</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">148<em>+</em></div>
+        <div class="stat-label">уроков и практических упражнений в библиотеке</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW -->
+  <section class="section-how" id="how">
+    <p class="section-label reveal">Метод</p>
+    <h2 class="section-title reveal">Как это<br><strong>работает</strong></h2>
+
+    <div class="how-grid">
+      <div class="how-steps">
+        <div class="how-step reveal" onclick="Diag.show()" style="cursor:pointer;" title="Пройти диагностику">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <div class="step-title">Диагностика уровня <span style="font-size:12px;color:var(--accent);font-weight:500;margin-left:8px;vertical-align:middle;">→ Пройти</span></div>
+            <div class="step-desc">Интерактивный тест за 10 минут — определяем твой уровень точно, без воды и шаблонных вопросов.</div>
+          </div>
+        </div>
+        <div class="how-step reveal">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <div class="step-title">Персональный план</div>
+            <div class="step-desc">Система строит маршрут под твои цели: работа, путешествия, экзамены или просто желание говорить.</div>
+          </div>
+        </div>
+        <div class="how-step reveal">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <div class="step-title">Практика каждый день</div>
+            <div class="step-desc">Короткие уроки по 15–20 минут. Без пропусков, без скуки — с геймификацией и живыми задачами.</div>
+          </div>
+        </div>
+        <div class="how-step reveal">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <div class="step-title">Говоришь с первой недели</div>
+            <div class="step-desc">AI-собеседник и живые разговорные клубы. Практика речи — с первого урока, не когда-нибудь потом.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-visual reveal">
+        <div class="terminal-bar">
+          <div class="terminal-dot r"></div>
+          <div class="terminal-dot y"></div>
+          <div class="terminal-dot g"></div>
+        </div>
+        <div class="terminal-body">
+          <div class="t-comment">// твой прогресс сегодня</div>
+          <br>
+          <div><span class="t-key">level</span>: <span class="t-val">"B1 → B2"</span></div>
+          <div><span class="t-key">streak</span>: <span class="t-accent">14 дней</span> 🔥</div>
+          <div><span class="t-key">lessons</span>: <span class="t-val">62 / 148</span></div>
+          <div><span class="t-key">words</span>: <span class="t-val">1 240</span> усвоено</div>
+          <br>
+          <div class="t-comment">// сегодняшняя задача</div>
+          <br>
+          <div><span class="t-key">topic</span>: <span class="t-val">"Conditionals II"</span></div>
+          <div><span class="t-key">duration</span>: <span class="t-val">~18 мин</span></div>
+          <div><span class="t-key">mode</span>: <span class="t-accent">разговор + тест</span></div>
+          <br>
+          <div><span class="t-dim">$ </span><span class="t-key">start</span> lesson<span class="t-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section-testimonials" id="testimonials">
+    <div class="test-inner">
+      <p class="section-label reveal">Отзывы студентов</p>
+      <h2 class="section-title reveal">Что говорят<br><strong>студенты</strong></h2>
+
+      <div class="carousel-wrap reveal">
+        <div class="carousel-viewport" id="carViewport">
+          <div class="carousel-track" id="carTrack">
+            <!-- cards injected by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-cta" id="cta">
+    <p class="section-label reveal" style="text-align:center;">Начни сегодня</p>
+    <h2 class="cta-title reveal">Твой первый урок —<br><strong>бесплатно</strong></h2>
+    <p class="cta-sub reveal">Никаких обязательств. Просто попробуй — и почувствуй разницу уже в первый день.</p>
+    <button onclick="App.startFreeLesson()" class="btn-primary reveal">
+      Начать бесплатно
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button onclick="App.resetDiagnostic()" class="btn-reset-diag reveal" id="ctaResetBtn" style="display:none;">
+      Пройти заново
+    </button>
+  </section>
+
+  <footer>
+    <div>© 2025 danil in language</div>
+    <div style="display:flex;gap:28px;">
+      <a href="#" style="color:var(--text-dim);text-decoration:none;">Политика конфиденциальности</a>
+      <a href="#" style="color:var(--text-dim);text-decoration:none;">Контакты</a>
+    </div>
+  </footer>
+
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: LESSON SELECTION
+═══════════════════════════════════════════════ -->
+<div id="page-lessons" style="display:none;">
+  <div class="app-page">
+    <div class="app-topbar">
+      <button class="btn-back" onclick="App.showHome()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Назад
+      </button>
+      <a class="nav-logo" href="javascript:App.showHome()">danil <em>in</em> language</a>
+    </div>
+
+    <div class="app-content">
+      <p class="section-label" style="text-align:center;margin-bottom:12px;" id="lessonsProgramLabel">Словарные карточки</p>
+      <h1 class="lessons-title">Выбери <strong>урок</strong></h1>
+      <p class="lessons-sub" id="lessonsSub">10 уроков · 10 слов в каждом · выбери с чего начать</p>
+
+      <div class="recommend-banner" id="recommendBanner" style="display:none;">
+        <div class="recommend-icon">💡</div>
+        <div class="recommend-text">
+          Рекомендуем начать со своего уровня: <strong id="recommendProgramName"></strong>
+        </div>
+        <button class="recommend-btn" id="recommendBtn">Перейти →</button>
+      </div>
+
+      <div class="lessons-grid" id="lessonsGrid">
+        <div class="lesson-card" data-lesson="0" onclick="App.startLesson(0)">
+          <div class="lesson-num">01</div>
+          <div class="lesson-name">Урок 1</div>
+          <div class="lesson-theme" data-theme>Природа и мир</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="1" onclick="App.startLesson(1)">
+          <div class="lesson-num">02</div>
+          <div class="lesson-name">Урок 2</div>
+          <div class="lesson-theme" data-theme>Дом и город</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="2" onclick="App.startLesson(2)">
+          <div class="lesson-num">03</div>
+          <div class="lesson-name">Урок 3</div>
+          <div class="lesson-theme" data-theme>Тело и еда</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="3" onclick="App.startLesson(3)">
+          <div class="lesson-num">04</div>
+          <div class="lesson-name">Урок 4</div>
+          <div class="lesson-theme" data-theme>Жизнь и работа</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="4" onclick="App.startLesson(4)">
+          <div class="lesson-num">05</div>
+          <div class="lesson-name">Урок 5</div>
+          <div class="lesson-theme" data-theme>Цвета и прилагательные</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="5" onclick="App.startLesson(5)">
+          <div class="lesson-num">06</div>
+          <div class="lesson-name">Урок 6</div>
+          <div class="lesson-theme" data-theme>—</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="6" onclick="App.startLesson(6)">
+          <div class="lesson-num">07</div>
+          <div class="lesson-name">Урок 7</div>
+          <div class="lesson-theme" data-theme>—</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="7" onclick="App.startLesson(7)">
+          <div class="lesson-num">08</div>
+          <div class="lesson-name">Урок 8</div>
+          <div class="lesson-theme" data-theme>—</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="8" onclick="App.startLesson(8)">
+          <div class="lesson-num">09</div>
+          <div class="lesson-name">Урок 9</div>
+          <div class="lesson-theme" data-theme>—</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+        <div class="lesson-card" data-lesson="9" onclick="App.startLesson(9)">
+          <div class="lesson-num">10</div>
+          <div class="lesson-name">Урок 10</div>
+          <div class="lesson-theme" data-theme>—</div>
+          <div class="lesson-count">10 слов</div>
+          <div class="lesson-check" title="Урок пройден">✓</div>
+          <div class="lesson-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: FLASHCARDS
+═══════════════════════════════════════════════ -->
+<div id="page-cards" style="display:none;">
+  <div class="app-page">
+    <div class="app-topbar">
+      <button class="btn-back" onclick="App.showLessons()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Уроки
+      </button>
+      <a class="nav-logo" href="javascript:App.showHome()">danil <em>in</em> language</a>
+    </div>
+
+    <div class="app-content cards-content">
+      <div class="cards-counter" id="cardsCounter">Карточка 1 из 10</div>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+
+      <div class="flashcard" id="flashcard">
+        <div class="flashcard-word-row">
+          <div class="flashcard-word" id="flashWord">cat</div>
+          <button class="speak-btn" id="flashSpeakBtn" type="button" aria-label="Озвучить слово" title="Озвучить слово">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3 7v4h2.8L9.5 14V4L5.8 7H3z" fill="currentColor"/>
+              <path d="M11.5 6.2c.9.6 1.5 1.7 1.5 2.8s-.6 2.2-1.5 2.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path d="M13.3 4.3c1.6 1.1 2.6 2.9 2.6 4.7s-1 3.6-2.6 4.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+            </svg>
+          </button>
+        </div>
+        <div class="flashcard-hint">Выбери правильный перевод</div>
+      </div>
+
+      <div class="answers-grid" id="answersGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: RESULT
+═══════════════════════════════════════════════ -->
+<div id="page-result" style="display:none;">
+  <div class="app-page">
+    <div class="app-topbar">
+      <button class="btn-back" onclick="App.showLessons()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Уроки
+      </button>
+      <a class="nav-logo" href="javascript:App.showHome()">danil <em>in</em> language</a>
+    </div>
+
+    <div class="app-content result-content">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <h2 class="result-title" id="resultTitle">Отличный результат!</h2>
+      <div class="result-score" id="resultScore">8 / 10</div>
+      <p class="result-sub" id="resultSub">Ты знаешь большинство слов этого урока. Продолжай в том же духе!</p>
+
+      <div class="result-actions" id="resultActions">
+        <button class="btn-primary" id="resultLessonsBtn" onclick="App.showLessons()">
+          Вернуться к урокам
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn-ghost" id="resultRetryBtn" onclick="App.retryLesson()">
+          Пройти ещё раз
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ─── APP PAGES SHARED ─── */
+.app-page {
+  min-height: 100vh;
+  background: var(--bg-deep);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-topbar {
+  padding: 22px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(237,237,243,0.07);
+  background: rgba(23,23,33,0.85);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid rgba(237,237,243,0.15);
+  color: var(--text-mid);
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 18px 8px 12px;
+  border-radius: 32px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-back:hover {
+  border-color: rgba(82,102,235,0.5);
+  color: var(--text);
+}
+
+.app-content {
+  flex: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 60px 32px 80px;
+}
+
+/* ─── LESSONS PAGE ─── */
+.lessons-title {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.lessons-title strong { font-weight: 700; }
+
+.lessons-sub {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 15px;
+  margin-bottom: 52px;
+}
+
+/* ── Recommendation banner (when viewing a non-matching program) ── */
+.recommend-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(82,102,235,0.1);
+  border: 1px solid rgba(82,102,235,0.3);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+.recommend-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.recommend-text {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+.recommend-text strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.recommend-btn {
+  flex-shrink: 0;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s;
+}
+.recommend-btn:hover {
+  background: #6275f0;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .recommend-banner { flex-wrap: wrap; }
+  .recommend-btn { width: 100%; }
+}
+
+.lessons-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lesson-card {
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.07);
+  border-radius: 18px;
+  padding: 28px 32px;
+  display: grid;
+  grid-template-columns: 48px 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: border-color 0.22s, background 0.22s, transform 0.18s;
+}
+.lesson-card:hover {
+  border-color: rgba(82,102,235,0.5);
+  background: rgba(82,102,235,0.07);
+  transform: translateX(4px);
+}
+
+.lesson-num {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.lesson-name {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.lesson-theme {
+  font-size: 13px;
+  color: var(--text-dim);
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: -10px;
+}
+.lesson-count {
+  font-size: 12px;
+  color: var(--text-dim);
+  background: rgba(237,237,243,0.07);
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+.lesson-arrow {
+  font-size: 20px;
+  color: var(--accent);
+  opacity: 0.6;
+  grid-row: 1 / span 2;
+  align-self: center;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.lesson-card:hover .lesson-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.lesson-card {
+  position: relative;
+}
+.lesson-card.completed {
+  border-color: rgba(62,207,142,0.35);
+  background: rgba(62,207,142,0.05);
+}
+.lesson-check {
+  display: none;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #3ecf8e;
+  color: #0d1f17;
+  font-size: 12px;
+  font-weight: 800;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.lesson-card.completed .lesson-check {
+  display: flex;
+}
+
+/* Fix grid for lesson card: num+name+theme in rows, count and arrow on right */
+.lesson-card {
+  grid-template-columns: 48px 1fr auto 24px;
+  grid-template-rows: auto auto;
+}
+.lesson-num { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+.lesson-name { grid-column: 2; grid-row: 1; }
+.lesson-theme { grid-column: 2; grid-row: 2; margin-top: 2px; }
+.lesson-count { grid-column: 3; grid-row: 1 / span 2; }
+.lesson-arrow { grid-column: 4; grid-row: 1 / span 2; }
+
+/* ─── FLASHCARDS PAGE ─── */
+.cards-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.cards-counter {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+  align-self: stretch;
+  text-align: center;
+}
+
+.progress-bar-wrap {
+  width: 100%;
+  max-width: 560px;
+  height: 3px;
+  background: rgba(237,237,243,0.1);
+  border-radius: 2px;
+  margin-bottom: 48px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.flashcard {
+  width: 100%;
+  max-width: 560px;
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.09);
+  border-radius: 24px;
+  padding: 64px 48px;
+  text-align: center;
+  margin-bottom: 36px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.flashcard.flip-out {
+  transform: scale(0.94) translateY(-8px);
+  opacity: 0;
+}
+.flashcard.flip-in {
+  transform: scale(0.94) translateY(8px);
+  opacity: 0;
+}
+
+.flashcard-word-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.flashcard-word {
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.speak-btn {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #272735;
+  border: 1px solid rgba(237,237,243,0.1);
+  color: var(--text-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.12s;
+}
+.speak-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.speak-btn:active {
+  transform: translateY(0) scale(0.94);
+}
+.speak-btn.speaking {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.flashcard-hint {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.03em;
+}
+
+.answers-grid {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.answer-btn {
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.1);
+  border-radius: 14px;
+  padding: 20px 24px;
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.18s, background 0.18s, transform 0.12s;
+  pointer-events: auto;
+}
+.answer-btn:hover:not(:disabled) {
+  border-color: rgba(82,102,235,0.5);
+  background: rgba(82,102,235,0.08);
+  transform: translateY(-2px);
+}
+.answer-btn.correct {
+  border-color: #3ecf8e;
+  background: rgba(62,207,142,0.12);
+  color: #3ecf8e;
+}
+.answer-btn.wrong {
+  border-color: #f66;
+  background: rgba(255,102,102,0.1);
+  color: #f66;
+}
+.answer-btn:disabled { cursor: default; }
+
+/* ─── RESULT PAGE ─── */
+.result-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 80px;
+}
+
+.result-emoji {
+  font-size: 72px;
+  margin-bottom: 24px;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popIn {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.result-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  margin-bottom: 20px;
+}
+
+.result-score {
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  margin-bottom: 20px;
+  line-height: 1;
+  transition: color 0.3s;
+}
+.result-score.result-score-fail {
+  color: #f66;
+}
+
+.result-sub {
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 400px;
+  line-height: 1.6;
+  margin-bottom: 52px;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.btn-ghost {
+  background: none;
+  border: 1px solid rgba(237,237,243,0.2);
+  color: var(--text-mid);
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px 36px;
+  border-radius: 32px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover {
+  border-color: rgba(82,102,235,0.5);
+  color: var(--text);
+}
+
+@media (max-width: 600px) {
+  .app-topbar { padding: 16px 20px; }
+  .app-content { padding: 40px 20px 60px; }
+  .lesson-card { padding: 20px; }
+  .flashcard { padding: 44px 24px; }
+  .answers-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+
+  /* ═══════════════════════════════════════
+     WORD DATABASE — 5 уроков по 10 слов
+  ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════
+     WORD DATABASE — 3 программы × 5 уроков по 10 слов
+  ═══════════════════════════════════════ */
+  const LESSON_PROGRAMS = {
+    'С нуля до разговорного': [
+      {
+        name: 'Урок 1 — Природа и мир',
+        theme: 'Природа и мир',
+        words: [
+          {en:'cat',   ru:'кошка'},  {en:'dog',   ru:'собака'},
+          {en:'house', ru:'дом'},    {en:'tree',  ru:'дерево'},
+          {en:'water', ru:'вода'},   {en:'fire',  ru:'огонь'},
+          {en:'sun',   ru:'солнце'}, {en:'moon',  ru:'луна'},
+          {en:'star',  ru:'звезда'}, {en:'sky',   ru:'небо'},
+        ]
+      },
+      {
+        name: 'Урок 2 — Дом и город',
+        theme: 'Дом и город',
+        words: [
+          {en:'book',   ru:'книга'},  {en:'door',   ru:'дверь'},
+          {en:'window', ru:'окно'},   {en:'table',  ru:'стол'},
+          {en:'chair',  ru:'стул'},   {en:'car',    ru:'машина'},
+          {en:'road',   ru:'дорога'}, {en:'city',   ru:'город'},
+          {en:'friend', ru:'друг'},   {en:'family', ru:'семья'},
+        ]
+      },
+      {
+        name: 'Урок 3 — Тело и еда',
+        theme: 'Тело и еда',
+        words: [
+          {en:'food',  ru:'еда'},    {en:'bread', ru:'хлеб'},
+          {en:'apple', ru:'яблоко'}, {en:'fish',  ru:'рыба'},
+          {en:'milk',  ru:'молоко'}, {en:'hand',  ru:'рука'},
+          {en:'eye',   ru:'глаз'},   {en:'heart', ru:'сердце'},
+          {en:'head',  ru:'голова'}, {en:'time',  ru:'время'},
+        ]
+      },
+      {
+        name: 'Урок 4 — Жизнь и работа',
+        theme: 'Жизнь и работа',
+        words: [
+          {en:'day',    ru:'день'},    {en:'night', ru:'ночь'},
+          {en:'love',   ru:'любовь'},  {en:'life',  ru:'жизнь'},
+          {en:'word',   ru:'слово'},   {en:'name',  ru:'имя'},
+          {en:'school', ru:'школа'},   {en:'work',  ru:'работа'},
+          {en:'money',  ru:'деньги'},  {en:'phone', ru:'телефон'},
+        ]
+      },
+      {
+        name: 'Урок 5 — Цвета и прилагательные',
+        theme: 'Цвета и прилагательные',
+        words: [
+          {en:'music', ru:'музыка'},   {en:'color', ru:'цвет'},
+          {en:'red',   ru:'красный'},  {en:'blue',  ru:'синий'},
+          {en:'green', ru:'зелёный'},  {en:'big',   ru:'большой'},
+          {en:'small', ru:'маленький'},{en:'good',  ru:'хороший'},
+          {en:'new',   ru:'новый'},    {en:'old',   ru:'старый'},
+        ]
+      },
+      {
+        name: 'Урок 6 — Время и дни',
+        theme: 'Время и дни ☀️',
+        words: [
+          {en:'morning',   ru:'утро'},       {en:'evening',   ru:'вечер'},
+          {en:'week',      ru:'неделя'},     {en:'month',     ru:'месяц'},
+          {en:'year',      ru:'год'},        {en:'today',     ru:'сегодня'},
+          {en:'tomorrow',  ru:'завтра'},     {en:'yesterday', ru:'вчера'},
+          {en:'hour',      ru:'час'},        {en:'minute',    ru:'минута'},
+        ]
+      },
+      {
+        name: 'Урок 7 — Погода',
+        theme: 'Погода 🌧️',
+        words: [
+          {en:'cold',      ru:'холодный'},   {en:'hot',       ru:'горячий'},
+          {en:'rain',      ru:'дождь'},      {en:'snow',      ru:'снег'},
+          {en:'wind',      ru:'ветер'},      {en:'sunny',     ru:'солнечный'},
+          {en:'cloudy',    ru:'облачный'},   {en:'storm',     ru:'буря'},
+          {en:'warm',      ru:'тёплый'},     {en:'weather',   ru:'погода'},
+        ]
+      },
+      {
+        name: 'Урок 8 — Семья',
+        theme: 'Семья 👨‍👩‍👧‍👦',
+        words: [
+          {en:'mother',    ru:'мама'},       {en:'father',    ru:'папа'},
+          {en:'sister',    ru:'сестра'},     {en:'brother',   ru:'брат'},
+          {en:'child',     ru:'ребёнок'},    {en:'grandmother',ru:'бабушка'},
+          {en:'grandfather',ru:'дедушка'},  {en:'aunt',      ru:'тётя'},
+          {en:'uncle',     ru:'дядя'},       {en:'cousin',    ru:'двоюродный брат'},
+        ]
+      },
+      {
+        name: 'Урок 9 — Действия',
+        theme: 'Действия 🏃',
+        words: [
+          {en:'run',       ru:'бежать'},     {en:'walk',      ru:'идти'},
+          {en:'eat',       ru:'есть'},       {en:'sleep',     ru:'спать'},
+          {en:'read',      ru:'читать'},     {en:'write',     ru:'писать'},
+          {en:'speak',     ru:'говорить'},   {en:'listen',    ru:'слушать'},
+          {en:'watch',     ru:'смотреть'},   {en:'play',      ru:'играть'},
+        ]
+      },
+      {
+        name: 'Урок 10 — Эмоции',
+        theme: 'Эмоции 😊',
+        words: [
+          {en:'happy',     ru:'счастливый'}, {en:'sad',       ru:'грустный'},
+          {en:'tired',     ru:'уставший'},   {en:'angry',     ru:'злой'},
+          {en:'scared',    ru:'напуганный'}, {en:'excited',   ru:'взволнованный'},
+          {en:'bored',     ru:'скучающий'},  {en:'surprised', ru:'удивлённый'},
+          {en:'worried',   ru:'обеспокоенный'},{en:'proud',   ru:'гордый'},
+        ]
+      },
+    ],
+
+    'Intermediate Boost': [
+      {
+        name: 'Урок 1 — Фразовые глаголы',
+        theme: 'Фразовые глаголы',
+        words: [
+          {en:'give up',     ru:'сдаваться'},     {en:'look after',  ru:'заботиться о'},
+          {en:'find out',    ru:'выяснить'},      {en:'get along',   ru:'ладить'},
+          {en:'come up with',ru:'придумать'},     {en:'put off',     ru:'откладывать'},
+          {en:'turn down',   ru:'отклонить'},     {en:'figure out',  ru:'разобраться'},
+          {en:'run into',    ru:'столкнуться'},   {en:'carry on',    ru:'продолжать'},
+        ]
+      },
+      {
+        name: 'Урок 2 — Эмоции и характер',
+        theme: 'Эмоции и характер',
+        words: [
+          {en:'confident',  ru:'уверенный'},   {en:'anxious',     ru:'тревожный'},
+          {en:'stubborn',   ru:'упрямый'},     {en:'generous',    ru:'щедрый'},
+          {en:'curious',    ru:'любопытный'},  {en:'ambitious',   ru:'амбициозный'},
+          {en:'patient',    ru:'терпеливый'},  {en:'reliable',    ru:'надёжный'},
+          {en:'frustrated', ru:'разочарован'}, {en:'grateful',    ru:'благодарный'},
+        ]
+      },
+      {
+        name: 'Урок 3 — В путешествии',
+        theme: 'В путешествии',
+        words: [
+          {en:'journey',    ru:'путешествие'},  {en:'destination', ru:'пункт назначения'},
+          {en:'luggage',    ru:'багаж'},        {en:'departure',   ru:'отправление'},
+          {en:'itinerary',  ru:'маршрут'},      {en:'accommodation',ru:'жильё'},
+          {en:'delay',      ru:'задержка'},     {en:'boarding',    ru:'посадка'},
+          {en:'customs',    ru:'таможня'},      {en:'currency',    ru:'валюта'},
+        ]
+      },
+      {
+        name: 'Урок 4 — Условные предложения',
+        theme: 'Условные предложения',
+        words: [
+          {en:'unless',     ru:'если не'},       {en:'provided that', ru:'при условии что'},
+          {en:'otherwise',  ru:'иначе'},         {en:'in case',       ru:'на случай если'},
+          {en:'assuming',   ru:'предполагая'},   {en:'likely',        ru:'вероятно'},
+          {en:'unlikely',   ru:'маловероятно'},  {en:'consequence',   ru:'последствие'},
+          {en:'outcome',    ru:'результат'},     {en:'circumstance',  ru:'обстоятельство'},
+        ]
+      },
+      {
+        name: 'Урок 5 — Живая речь носителей',
+        theme: 'Живая речь носителей',
+        words: [
+          {en:'I guess',       ru:'наверное'},        {en:'kind of',     ru:'вроде как'},
+          {en:'no worries',    ru:'без проблем'},      {en:'sort of',     ru:'типа того'},
+          {en:'to be honest',  ru:'если честно'},      {en:'by the way',  ru:'кстати'},
+          {en:'I mean',        ru:'то есть'},           {en:'actually',    ru:'вообще-то'},
+          {en:'whatever',      ru:'как угодно'},        {en:'anyway',      ru:'в любом случае'},
+        ]
+      },
+      {
+        name: 'Урок 6 — Ответственность',
+        theme: 'Ответственность и решения',
+        words: [
+          {en:'responsibility', ru:'ответственность'}, {en:'decision',    ru:'решение'},
+          {en:'influence',      ru:'влияние'},          {en:'behavior',    ru:'поведение'},
+          {en:'attitude',       ru:'отношение'},        {en:'commitment',  ru:'обязательство'},
+          {en:'accountability', ru:'подотчётность'},    {en:'obligation',  ru:'обязанность'},
+          {en:'awareness',      ru:'осознанность'},     {en:'initiative',  ru:'инициатива'},
+        ]
+      },
+      {
+        name: 'Урок 7 — Советы и рекомендации',
+        theme: 'Советы и рекомендации',
+        words: [
+          {en:'recommend',      ru:'рекомендовать'},   {en:'suggest',     ru:'предлагать'},
+          {en:'consider',       ru:'рассматривать'},   {en:'evaluate',    ru:'оценивать'},
+          {en:'analyze',        ru:'анализировать'},   {en:'assess',      ru:'оценивать'},
+          {en:'propose',        ru:'предлагать'},      {en:'advise',      ru:'советовать'},
+          {en:'review',         ru:'пересматривать'},  {en:'determine',   ru:'определять'},
+        ]
+      },
+      {
+        name: 'Урок 8 — Проблемы и решения',
+        theme: 'Проблемы и решения',
+        words: [
+          {en:'benefit',        ru:'польза'},          {en:'disadvantage', ru:'недостаток'},
+          {en:'solution',       ru:'решение'},         {en:'problem',      ru:'проблема'},
+          {en:'result',         ru:'результат'},       {en:'challenge',    ru:'вызов'},
+          {en:'approach',       ru:'подход'},          {en:'strategy',     ru:'стратегия'},
+          {en:'obstacle',       ru:'препятствие'},     {en:'achievement',  ru:'достижение'},
+        ]
+      },
+      {
+        name: 'Урок 9 — Общество и мир',
+        theme: 'Общество и мир',
+        words: [
+          {en:'culture',        ru:'культура'},        {en:'tradition',    ru:'традиция'},
+          {en:'society',        ru:'общество'},        {en:'government',   ru:'правительство'},
+          {en:'environment',    ru:'окружающая среда'},{en:'community',    ru:'сообщество'},
+          {en:'diversity',      ru:'разнообразие'},    {en:'equality',     ru:'равенство'},
+          {en:'freedom',        ru:'свобода'},         {en:'democracy',    ru:'демократия'},
+        ]
+      },
+      {
+        name: 'Урок 10 — Личные качества',
+        theme: 'Личные качества',
+        words: [
+          {en:'curious',        ru:'любопытный'},      {en:'confident',    ru:'уверенный'},
+          {en:'creative',       ru:'творческий'},      {en:'ambitious',    ru:'амбициозный'},
+          {en:'patient',        ru:'терпеливый'},      {en:'disciplined',  ru:'дисциплинированный'},
+          {en:'empathetic',     ru:'эмпатичный'},      {en:'flexible',     ru:'гибкий'},
+          {en:'determined',     ru:'целеустремлённый'},{en:'optimistic',   ru:'оптимистичный'},
+        ]
+      },
+    ],
+
+    'Business English': [
+      {
+        name: 'Урок 1 — Деловая переписка',
+        theme: 'Деловая переписка',
+        words: [
+          {en:'attached',    ru:'во вложении'},   {en:'regarding',   ru:'относительно'},
+          {en:'follow up',   ru:'уточнить позже'},{en:'deadline',    ru:'крайний срок'},
+          {en:'kindly',      ru:'будьте добры'},  {en:'enclosed',    ru:'прилагается'},
+          {en:'forward',     ru:'переслать'},     {en:'recipient',   ru:'получатель'},
+          {en:'cc',          ru:'копия письма'},  {en:'reply',       ru:'ответить'},
+        ]
+      },
+      {
+        name: 'Урок 2 — Переговоры',
+        theme: 'Переговоры',
+        words: [
+          {en:'agreement',   ru:'соглашение'},   {en:'compromise',  ru:'компромисс'},
+          {en:'proposal',    ru:'предложение'},  {en:'negotiate',   ru:'вести переговоры'},
+          {en:'terms',       ru:'условия'},      {en:'deal',        ru:'сделка'},
+          {en:'counteroffer',ru:'встречное предложение'}, {en:'leverage', ru:'преимущество'},
+          {en:'stakeholder', ru:'заинтересованная сторона'}, {en:'consensus', ru:'консенсус'},
+        ]
+      },
+      {
+        name: 'Урок 3 — На встрече',
+        theme: 'На встрече',
+        words: [
+          {en:'agenda',      ru:'повестка дня'},  {en:'minutes',     ru:'протокол'},
+          {en:'attendee',    ru:'участник'},      {en:'postpone',    ru:'перенести'},
+          {en:'overview',    ru:'обзор'},         {en:'feedback',    ru:'обратная связь'},
+          {en:'milestone',   ru:'веха проекта'},  {en:'action item', ru:'задача к выполнению'},
+          {en:'brief',       ru:'кратко изложить'},{en:'summarize',  ru:'подытожить'},
+        ]
+      },
+      {
+        name: 'Урок 4 — Финансы и отчётность',
+        theme: 'Финансы и отчётность',
+        words: [
+          {en:'revenue',     ru:'выручка'},       {en:'expense',     ru:'расход'},
+          {en:'budget',      ru:'бюджет'},        {en:'forecast',    ru:'прогноз'},
+          {en:'profit',      ru:'прибыль'},       {en:'invoice',     ru:'счёт-фактура'},
+          {en:'quarter',     ru:'квартал'},       {en:'shareholder', ru:'акционер'},
+          {en:'investment',  ru:'инвестиция'},    {en:'asset',       ru:'актив'},
+        ]
+      },
+      {
+        name: 'Урок 5 — Презентации',
+        theme: 'Презентации',
+        words: [
+          {en:'audience',    ru:'аудитория'},     {en:'highlight',   ru:'подчеркнуть'},
+          {en:'insight',     ru:'наблюдение'},    {en:'outline',     ru:'план изложения'},
+          {en:'key takeaway',ru:'главный вывод'}, {en:'slide deck',  ru:'презентация'},
+          {en:'pitch',       ru:'питч'},          {en:'persuade',    ru:'убедить'},
+          {en:'visual aid',  ru:'наглядное пособие'}, {en:'Q&A',     ru:'вопросы и ответы'},
+        ]
+      },
+      {
+        name: 'Урок 6 — Собрания и заседания',
+        theme: 'Собрания и заседания',
+        words: [
+          {en:'agenda',         ru:'повестка дня'},    {en:'minutes',      ru:'протокол'},
+          {en:'chairperson',    ru:'председатель'},    {en:'consensus',    ru:'консенсус'},
+          {en:'adjourn',        ru:'закрыть заседание'},{en:'motion',      ru:'предложение'},
+          {en:'vote',           ru:'голосование'},     {en:'quorum',       ru:'кворум'},
+          {en:'resolution',     ru:'резолюция'},       {en:'participant',  ru:'участник'},
+        ]
+      },
+      {
+        name: 'Урок 7 — Счета и оплата',
+        theme: 'Счета и оплата',
+        words: [
+          {en:'invoice',        ru:'счёт'},            {en:'payment',      ru:'оплата'},
+          {en:'overdue',        ru:'просроченный'},    {en:'discount',     ru:'скидка'},
+          {en:'refund',         ru:'возврат'},         {en:'receipt',      ru:'квитанция'},
+          {en:'installment',    ru:'рассрочка'},       {en:'deposit',      ru:'депозит'},
+          {en:'transaction',    ru:'транзакция'},      {en:'balance',      ru:'баланс'},
+        ]
+      },
+      {
+        name: 'Урок 8 — Слияния и инвестиции',
+        theme: 'Слияния и инвестиции',
+        words: [
+          {en:'merger',         ru:'слияние'},         {en:'acquisition',  ru:'поглощение'},
+          {en:'stakeholder',    ru:'заинтересованная сторона'},{en:'shareholder',ru:'акционер'},
+          {en:'dividend',       ru:'дивиденд'},        {en:'portfolio',    ru:'портфель'},
+          {en:'venture',        ru:'венчурный проект'},{en:'equity',       ru:'собственный капитал'},
+          {en:'valuation',      ru:'оценка стоимости'},{en:'IPO',          ru:'первичное размещение'},
+        ]
+      },
+      {
+        name: 'Урок 9 — Право и интеллектуальная собственность',
+        theme: 'Право и IP',
+        words: [
+          {en:'trademark',      ru:'торговая марка'},  {en:'patent',       ru:'патент'},
+          {en:'copyright',      ru:'авторское право'}, {en:'license',      ru:'лицензия'},
+          {en:'compliance',     ru:'соответствие'},    {en:'regulation',   ru:'регуляция'},
+          {en:'contract',       ru:'контракт'},        {en:'liability',    ru:'ответственность'},
+          {en:'clause',         ru:'пункт договора'},  {en:'agreement',    ru:'соглашение'},
+        ]
+      },
+      {
+        name: 'Урок 10 — Управление и делегирование',
+        theme: 'Управление и делегирование',
+        words: [
+          {en:'delegate',       ru:'делегировать'},    {en:'empower',      ru:'наделять полномочиями'},
+          {en:'supervise',      ru:'контролировать'},  {en:'coordinate',   ru:'координировать'},
+          {en:'motivate',       ru:'мотивировать'},    {en:'mentor',       ru:'наставлять'},
+          {en:'evaluate',       ru:'оценивать'},       {en:'performance',  ru:'производительность'},
+          {en:'feedback',       ru:'обратная связь'},  {en:'accountability',ru:'подотчётность'},
+        ]
+      },
+    ],
+  };
+
+  // Делаем словарь программ доступным для модуля Profile (подсчёт выученных слов)
+  window.__LESSON_PROGRAMS_REF = LESSON_PROGRAMS;
+
+  // Также экспортируем speakEnglishWord, чтобы Review/другие модули могли её вызывать
+  window.speakEnglishWord = function(text, btnEl) {
+    if (typeof speakEnglishWord === 'function') speakEnglishWord(text, btnEl);
+  };
+
+  // ── Определяем активную программу на основе сохранённого уровня диагностики ──
+  function getActiveProgramName() {
+    let level = 'Начинающий';
+    try {
+      const saved = JSON.parse(localStorage.getItem('dil_userPlan') || localStorage.getItem('dil_diagResult') || 'null');
+      level = (saved && saved.level) || 'Начинающий';
+    } catch (e) { /* используем дефолтный уровень */ }
+
+    const programByLevel = {
+      'Начинающий': 'С нуля до разговорного',
+      'Средний':    'Intermediate Boost',
+      'Продвинутый':'Business English',
+    };
+    return programByLevel[level] || programByLevel['Начинающий'];
+  }
+
+  // Текущий активный массив уроков (пересчитывается при каждом showLessons)
+  let LESSONS = LESSON_PROGRAMS['С нуля до разговорного'];
+
+  /* ═══════════════════════════════════════
+     PAGES
+  ═══════════════════════════════════════ */
+  const pages = {
+    home:    document.getElementById('hero').parentElement || document.body,
+    lessons: document.getElementById('page-lessons'),
+    cards:   document.getElementById('page-cards'),
+    result:  document.getElementById('page-result'),
+  };
+
+  // The "home" is everything except the SPA pages — handle separately
+  const homeEls = [
+    document.getElementById('nav'),
+    document.getElementById('hero'),
+    document.getElementById('main'),
+  ];
+
+  function showPage(name) {
+    // Hide/show home elements
+    const isHome = name === 'home';
+    homeEls.forEach(el => { if (el) el.style.display = isHome ? '' : 'none'; });
+    // Hide/show SPA pages
+    ['lessons','cards','result'].forEach(p => {
+      pages[p].style.display = (p === name) ? 'block' : 'none';
+    });
+    // На всякий случай прячем страницы из других модулей (Профиль/Диагностика/План),
+    // чтобы при прямом переходе они не оставались поверх друг друга
+    ['page-profile','page-diag','page-plan','page-review'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    window.scrollTo(0,0);
+  }
+
+  /* ═══════════════════════════════════════
+     GAME STATE
+  ═══════════════════════════════════════ */
+  let currentLesson = 0;
+  let currentIndex  = 0;
+  let score         = 0;
+  let answering     = false;
+  let shuffledWords = [];
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length-1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  // Pick 3 wrong answers from all words except current
+  function getWrongAnswers(correct, lessonWords) {
+    const allRu = LESSONS.flatMap(l => l.words).map(w => w.ru).filter(r => r !== correct);
+    return shuffle(allRu).slice(0, 3);
+  }
+
+  /* ═══════════════════════════════════════
+     ОЗВУЧКА СЛОВ — Web Speech API (оффлайн, без сторонних библиотек)
+  ═══════════════════════════════════════ */
+  // В некоторых браузерах список голосов подгружается асинхронно —
+  // заранее "прогреваем" его, чтобы английский голос точно успел подгрузиться к моменту клика
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    } catch (e) { /* игнорируем */ }
+  }
+
+  function speakEnglishWord(text, btnEl) {
+    try {
+      if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+        // В браузере нет поддержки Web Speech API — просто ничего не делаем,
+        // интерфейс не блокируем, кнопка остаётся видимой и кликабельной
+        return;
+      }
+
+      // Прерываем предыдущую озвучку, если она ещё идёт
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang  = 'en-US';
+      utterance.rate  = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      // Пытаемся явно выбрать английский голос, если он доступен в браузере.
+      // Если английского голоса нет — всё равно пробуем произнести текст
+      // (браузер может использовать голос по умолчанию или просто не озвучить — это нормально).
+      try {
+        const voices = window.speechSynthesis.getVoices();
+        const enVoice = voices.find(v => v.lang === 'en-US') || voices.find(v => /^en/i.test(v.lang));
+        if (enVoice) utterance.voice = enVoice;
+      } catch (e) { /* игнорируем — используем голос по умолчанию */ }
+
+      if (btnEl) {
+        btnEl.classList.add('speaking');
+        utterance.onend   = () => btnEl.classList.remove('speaking');
+        utterance.onerror = () => btnEl.classList.remove('speaking');
+      }
+
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      // Любая ошибка Web Speech API — не блокируем интерфейс, просто молча игнорируем
+      if (btnEl) btnEl.classList.remove('speaking');
+    }
+  }
+
+  function renderCard() {
+    const word    = shuffledWords[currentIndex];
+    const total   = shuffledWords.length;
+    const counter = document.getElementById('cardsCounter');
+    const bar     = document.getElementById('progressBar');
+    const wordEl  = document.getElementById('flashWord');
+    const grid    = document.getElementById('answersGrid');
+    const speakBtn = document.getElementById('flashSpeakBtn');
+
+    counter.textContent = `Карточка ${currentIndex + 1} из ${total}`;
+    bar.style.width = `${((currentIndex) / total) * 100}%`;
+    wordEl.textContent = word.en;
+
+    // Озвучка слова по клику на кнопку 🔊 (Web Speech API, оффлайн, без сторонних библиотек)
+    if (speakBtn) {
+      speakBtn.onclick = (e) => {
+        e.stopPropagation();
+        speakEnglishWord(word.en, speakBtn);
+      };
+    }
+
+    // Build answers
+    const wrongs  = getWrongAnswers(word.ru, shuffledWords);
+    const options = shuffle([word.ru, ...wrongs]);
+
+    grid.innerHTML = '';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+      btn.textContent = opt;
+      btn.onclick = () => handleAnswer(btn, opt, word.ru, options, grid, word);
+      grid.appendChild(btn);
+    });
+
+    answering = false;
+  }
+
+  function handleAnswer(btn, chosen, correct, options, grid, wordObj) {
+    if (answering) return;
+    answering = true;
+
+    const allBtns = grid.querySelectorAll('.answer-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    const isCorrect = chosen === correct;
+    if (isCorrect) {
+      btn.classList.add('correct');
+      score++;
+      // Слово отвечено правильно — добавляем/обновляем его в системе повторения (spaced repetition)
+      if (wordObj && wordObj.en) {
+        SRS.recordCorrectInLesson(wordObj.en, wordObj.ru);
+      }
+    } else {
+      btn.classList.add('wrong');
+      // Highlight correct
+      allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+    }
+
+    const delay = isCorrect ? 900 : 1500;
+    setTimeout(() => advanceCard(), delay);
+  }
+
+  function advanceCard() {
+    const card = document.getElementById('flashcard');
+    card.classList.add('flip-out');
+
+    setTimeout(() => {
+      currentIndex++;
+      const total = shuffledWords.length;
+      if (currentIndex >= total) {
+        showResult();
+        return;
+      }
+      card.classList.remove('flip-out');
+      card.classList.add('flip-in');
+      renderCard();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          card.classList.remove('flip-in');
+        });
+      });
+    }, 240);
+  }
+
+  function showResult() {
+    const total = shuffledWords.length;
+    const emoji = document.getElementById('resultEmoji');
+    const title = document.getElementById('resultTitle');
+    const scoreEl = document.getElementById('resultScore');
+    const sub   = document.getElementById('resultSub');
+    const actionsEl = document.getElementById('resultActions');
+
+    scoreEl.textContent = `${score} / ${total}`;
+
+    const PASS_THRESHOLD = 7; // минимум правильных ответов для зачёта урока
+    const passed = score >= PASS_THRESHOLD;
+    const pct = score / total;
+
+    if (pct === 1) {
+      emoji.textContent = '🏆';
+      title.textContent = 'Идеальный результат!';
+      sub.textContent   = 'Все слова знаешь на отлично. Ты готов к следующему уроку!';
+    } else if (passed) {
+      emoji.textContent = '🎉';
+      title.textContent = 'Отличный результат!';
+      sub.textContent   = 'Урок засчитан. Ты знаешь большинство слов этого урока — продолжай в том же духе!';
+    } else if (pct >= 0.5) {
+      emoji.textContent = '💪';
+      title.textContent = 'Почти получилось!';
+      sub.textContent   = `Для зачёта урока нужно минимум ${PASS_THRESHOLD} правильных ответов из ${total}. Попробуй пройти урок ещё раз — у тебя получится!`;
+    } else {
+      emoji.textContent = '📖';
+      title.textContent = 'Нужно повторить';
+      sub.textContent   = `Урок не засчитан — правильных ответов меньше ${PASS_THRESHOLD}. Пройди урок заново, чтобы закрепить слова.`;
+    }
+
+    // Визуально различаем «успех» и «нужно пересдать» + меняем порядок/текст кнопок
+    const retryBtn   = document.getElementById('resultRetryBtn');
+    const lessonsBtn = document.getElementById('resultLessonsBtn');
+    if (scoreEl) scoreEl.classList.toggle('result-score-fail', !passed);
+
+    if (passed) {
+      // Урок засчитан — основное действие: вернуться к урокам
+      if (lessonsBtn) { lessonsBtn.className = 'btn-primary'; lessonsBtn.innerHTML = 'Вернуться к урокам <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+      if (retryBtn)   { retryBtn.className = 'btn-ghost'; retryBtn.textContent = 'Пройти ещё раз'; }
+      if (actionsEl) actionsEl.prepend(lessonsBtn); // primary button first
+    } else {
+      // Урок не засчитан — основное действие: пройти заново
+      if (retryBtn)   { retryBtn.className = 'btn-primary'; retryBtn.innerHTML = 'Пройти урок заново <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+      if (lessonsBtn) { lessonsBtn.className = 'btn-ghost'; lessonsBtn.textContent = 'Вернуться к урокам'; }
+      if (actionsEl) actionsEl.prepend(retryBtn); // primary button first
+    }
+
+    // Progress bar to 100%
+    document.getElementById('progressBar').style.width = '100%';
+    showPage('result');
+
+    // ── Урок засчитывается как пройденный только при score >= 7 ──
+    App.markLessonCompleted(currentLesson, score);
+  }
+
+  /* ═══════════════════════════════════════
+     PUBLIC API
+  ═══════════════════════════════════════ */
+  window.App = {
+    showHome() {
+      showPage('home');
+      App.updateResetBtnVisibility();
+      // Re-trigger scroll to restore nav state
+      window.dispatchEvent(new Event('scroll'));
+    },
+    showLessons(programOverride) {
+      App.refreshActiveProgram(programOverride);
+      showPage('lessons');
+      App.renderLessonProgress();
+    },
+    // ── Определяем программу по уровню диагностики (или используем явно переданную),
+    //    обновляем LESSONS, текст страницы и плашку-рекомендацию ──
+    refreshActiveProgram(programOverride) {
+      const ownProgram = getActiveProgramName();
+      const program = LESSON_PROGRAMS[programOverride] ? programOverride : ownProgram;
+      LESSONS = LESSON_PROGRAMS[program] || LESSON_PROGRAMS['С нуля до разговорного'];
+
+      // "Активная" (последняя открытая) программа — нужна для startLesson/прогресса
+      try { localStorage.setItem('dil_activeProgram', program); } catch (e) {}
+
+      // Обновляем заголовок-метку и подзаголовок страницы
+      const labelEl = document.getElementById('lessonsProgramLabel');
+      const subEl   = document.getElementById('lessonsSub');
+      if (labelEl) labelEl.textContent = program;
+      if (subEl)   subEl.textContent   = `10 уроков · 10 слов в каждом · выбери с чего начать`;
+
+      // Заполняем темы уроков и названия на карточках под выбранную программу
+      const cards = document.querySelectorAll('#lessonsGrid .lesson-card[data-lesson]');
+      cards.forEach(card => {
+        const idx = parseInt(card.getAttribute('data-lesson'), 10);
+        const lesson = LESSONS[idx];
+        if (!lesson) return;
+        const themeEl = card.querySelector('[data-theme]');
+        if (themeEl) themeEl.textContent = lesson.theme || lesson.name;
+      });
+
+      // ── Плашка-рекомендация: показываем, только если открыта программа,
+      //    не соответствующая уровню пользователя (и диагностика уже пройдена) ──
+      const banner   = document.getElementById('recommendBanner');
+      const nameEl   = document.getElementById('recommendProgramName');
+      const recBtn   = document.getElementById('recommendBtn');
+      let hasResult  = false;
+      try { hasResult = !!(localStorage.getItem('dil_userPlan') || localStorage.getItem('dil_diagResult')); } catch (e) {}
+
+      if (banner) {
+        if (hasResult && program !== ownProgram) {
+          banner.style.display = 'flex';
+          if (nameEl) nameEl.textContent = ownProgram;
+          if (recBtn) recBtn.onclick = () => App.showLessons(ownProgram);
+        } else {
+          banner.style.display = 'none';
+        }
+      }
+    },
+    startLesson(idx) {
+      currentLesson = idx;
+      currentIndex  = 0;
+      score         = 0;
+      shuffledWords = shuffle(LESSONS[idx].words);
+      showPage('cards');
+      // reset progress bar
+      document.getElementById('progressBar').style.width = '0%';
+      renderCard();
+      // Ensure flashcard is visible
+      const card = document.getElementById('flashcard');
+      card.classList.remove('flip-out','flip-in');
+    },
+    retryLesson() {
+      App.startLesson(currentLesson);
+    },
+    // ── Кнопка "Начать бесплатно": проверяем, проходил ли пользователь диагностику ──
+    startFreeLesson() {
+      let hasSavedResult = false;
+      try {
+        const saved = localStorage.getItem('dil_userPlan') || localStorage.getItem('dil_diagResult');
+        hasSavedResult = !!saved;
+      } catch (e) { hasSavedResult = false; }
+
+      if (hasSavedResult && typeof Plan !== 'undefined' && Plan.startLessons) {
+        // Результат уже есть — сразу переходим к урокам нужной программы
+        Plan.startLessons();
+      } else {
+        // Результата нет — запускаем диагностику с нуля
+        Diag.show();
+      }
+    },
+    // ── Кнопка "Пройти заново": сбрасывает сохранённый результат и открывает диагностику ──
+    resetDiagnostic() {
+      try {
+        localStorage.removeItem('dil_diagResult');
+        localStorage.removeItem('dil_userPlan');
+        localStorage.removeItem('dil_activeProgram');
+        localStorage.removeItem('dil_completedLessons');
+      } catch (e) { /* localStorage недоступен — игнорируем */ }
+      App.updateResetBtnVisibility();
+      Diag.show();
+    },
+    // ── Клик по карточке программы на главной: если диагностика пройдена — открываем уроки,
+    //    иначе (как раньше) скроллим к блоку "Начни сегодня" ──
+    openProgramOrScroll(programName) {
+      let hasResult = false;
+      try { hasResult = !!(localStorage.getItem('dil_userPlan') || localStorage.getItem('dil_diagResult')); } catch (e) {}
+
+      if (hasResult) {
+        App.showLessons(programName);
+      } else {
+        const el = document.getElementById('cta');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    },
+    // ── Показываем/скрываем кнопку "Пройти заново" в зависимости от наличия результата ──
+    updateResetBtnVisibility() {
+      let hasSavedResult = false;
+      try {
+        const saved = localStorage.getItem('dil_userPlan') || localStorage.getItem('dil_diagResult');
+        hasSavedResult = !!saved;
+      } catch (e) { hasSavedResult = false; }
+      const btn = document.getElementById('ctaResetBtn');
+      if (btn) btn.style.display = hasSavedResult ? 'block' : 'none';
+    },
+    // ── Сохраняем результат урока (с привязкой к программе).
+    //    Урок засчитывается как пройденный только при score >= 7 из 10.
+    //    Если урок уже был пройден раньше — сохраняем лучший (больший) результат. ──
+    markLessonCompleted(idx, scoreVal) {
+      // Урок не засчитывается, если правильных ответов меньше 7
+      if (typeof scoreVal !== 'number' || scoreVal < 7) return;
+
+      let program = 'С нуля до разговорного';
+      try { program = localStorage.getItem('dil_activeProgram') || getActiveProgramName(); } catch (e) { program = getActiveProgramName(); }
+
+      let allCompleted = {};
+      try {
+        allCompleted = JSON.parse(localStorage.getItem('dil_completedLessons') || '{}');
+        if (!allCompleted || typeof allCompleted !== 'object' || Array.isArray(allCompleted)) allCompleted = {};
+      } catch (e) { allCompleted = {}; }
+
+      // Формат хранения: { "Программа": { "индексУрока": лучшийРезультат } }
+      const progData = (allCompleted[program] && typeof allCompleted[program] === 'object' && !Array.isArray(allCompleted[program]))
+        ? allCompleted[program]
+        : {};
+
+      const prevBest = typeof progData[idx] === 'number' ? progData[idx] : 0;
+      // Обновляем сохранённый результат, только если новый результат лучше (или урок ещё не был пройден)
+      if (scoreVal > prevBest) {
+        progData[idx] = scoreVal;
+        allCompleted[program] = progData;
+        try { localStorage.setItem('dil_completedLessons', JSON.stringify(allCompleted)); } catch (e) { /* игнорируем */ }
+      }
+    },
+    // ── Отмечаем галочками карточки пройденных уроков просматриваемой программы ──
+    renderLessonProgress() {
+      let program = 'С нуля до разговорного';
+      try { program = localStorage.getItem('dil_activeProgram') || getActiveProgramName(); } catch (e) { program = getActiveProgramName(); }
+
+      let allCompleted = {};
+      try {
+        allCompleted = JSON.parse(localStorage.getItem('dil_completedLessons') || '{}');
+        if (!allCompleted || typeof allCompleted !== 'object' || Array.isArray(allCompleted)) allCompleted = {};
+      } catch (e) { allCompleted = {}; }
+
+      const progData = (allCompleted[program] && typeof allCompleted[program] === 'object' && !Array.isArray(allCompleted[program]))
+        ? allCompleted[program]
+        : {};
+
+      document.querySelectorAll('.lesson-card[data-lesson]').forEach(card => {
+        const idx = card.getAttribute('data-lesson');
+        const isCompleted = typeof progData[idx] === 'number' && progData[idx] >= 7;
+        card.classList.toggle('completed', isCompleted);
+      });
+    }
+  };
+
+  // Проверяем при загрузке страницы, есть ли уже сохранённый результат
+  App.updateResetBtnVisibility();
+
+  /* ═══════════════════════════════════════
+     TESTIMONIALS CAROUSEL — infinite drag/swipe
+  ═══════════════════════════════════════ */
+  (function () {
+    const REVIEWS = [
+      { quote: 'Наконец-то нашла систему, где всё объяснено логично, а не через зубрёжку. За 2 месяца прошла собеседование в международную компанию.', name: 'Анастасия К.', meta: 'Дизайнер · Москва', avatar: '👩' },
+      { quote: 'Три года пробовал разные приложения. Здесь за месяц сделал больше, чем за все три года. Метод реально работает.', name: 'Иван Р.', meta: 'Разработчик · Санкт-Петербург', avatar: '👨' },
+      { quote: 'Уехала в Лондон через полгода после старта. Понимаю носителей, разговариваю без страха. Это реально изменило мою жизнь.', name: 'Мария Д.', meta: 'Менеджер · Екатеринбург', avatar: '👩‍🦱' },
+      { quote: 'Готовился к IELTS и думал, что провалюсь. Взял 7.0 с первого раза. Раздел по грамматике вообще огонь — объяснено так, что не забудешь.', name: 'Тимур А.', meta: 'Студент · Казань', avatar: '👨‍🎓' },
+      { quote: 'Я бухгалтер, 47 лет, и всегда думала что для меня язык уже недоступен. Через 4 месяца самостоятельно заказала отель в Барселоне и поговорила с местными. Не верила что такое возможно.', name: 'Светлана М.', meta: 'Бухгалтер · Новосибирск', avatar: '👩‍💼' },
+      { quote: 'Работаю в IT, английский нужен каждый день. Раньше читал документацию со словарём — теперь просто читаю. На стендапах с иностранными коллегами больше не паникую.', name: 'Артём В.', meta: 'Инженер · Москва', avatar: '👨‍💻' },
+      { quote: 'С мужем решили переехать в Германию, и нам обоим нужен был английский для работы. Занимались вместе вечерами — это вообще отдельный кайф, когда учишься с близким человеком.', name: 'Екатерина Н.', meta: 'Маркетолог · Самара', avatar: '👩' },
+      { quote: 'Честно говоря, сначала скептически отнёсся. Потом попробовал — и не мог остановиться. Урок за уроком, слово за словом. За 3 месяца смотрю сериалы без субтитров.', name: 'Никита Ф.', meta: 'Предприниматель · Краснодар', avatar: '🧑' },
+      { quote: 'Путешествую много, и всегда был языковой барьер. Теперь сам спрашиваю дорогу, торгуюсь на рынках, знакомлюсь с людьми. Жизнь стала ярче буквально.', name: 'Алина С.', meta: 'Блогер · Ростов-на-Дону', avatar: '👩‍🦰' },
+      { quote: 'Мне 19, учусь в универе. Купил курс чтобы подтянуть для учёбы, а оказалось что ещё и для игр и общения онлайн пригодилось. Теперь в гильдии одни иностранцы и мне норм.', name: 'Данил Ш.', meta: 'Студент · Омск', avatar: '🧑‍🎤' },
+    ];
+
+    const GAP      = 20;
+    const VISIBLE  = 3;
+    const N        = REVIEWS.length;
+
+    const viewport = document.getElementById('carViewport');
+    const track    = document.getElementById('carTrack');
+    if (!track) return;
+
+    // ── Build an infinite clone buffer: [clone tail] + [originals] + [clone head]
+    // We clone VISIBLE cards on each side so jumps are seamless.
+    const CLONE_BUF = VISIBLE + 1;
+
+    function makeCard(r) {
+      const el = document.createElement('div');
+      el.className = 'test-card';
+      el.innerHTML = `
+        <div class="test-quote">«${r.quote}»</div>
+        <div class="test-author">
+          <div class="test-avatar">${r.avatar}</div>
+          <div>
+            <div class="test-name">${r.name}</div>
+            <div class="test-meta">${r.meta}</div>
+          </div>
+        </div>`;
+      return el;
+    }
+
+    // tail clones: last CLONE_BUF originals
+    for (let i = N - CLONE_BUF; i < N; i++) track.appendChild(makeCard(REVIEWS[i]));
+    // originals
+    REVIEWS.forEach(r => track.appendChild(makeCard(r)));
+    // head clones: first CLONE_BUF originals
+    for (let i = 0; i < CLONE_BUF; i++) track.appendChild(makeCard(REVIEWS[i]));
+
+    const allCards = () => track.querySelectorAll('.test-card');
+
+    // "real" index into originals (0-based), maps to card index CLONE_BUF + realIdx
+    let realIdx = 0; // which original card is the leftmost visible
+
+    function cardWidth() {
+      return (viewport.offsetWidth - GAP * (VISIBLE - 1)) / VISIBLE;
+    }
+
+    function setWidths() {
+      const w = cardWidth();
+      allCards().forEach(c => { c.style.width = w + 'px'; c.style.flexShrink = '0'; });
+    }
+
+    // px offset so that realIdx original is the first visible card
+    function offsetForReal(idx) {
+      const w = cardWidth();
+      // card position in track = (CLONE_BUF + idx)
+      return (CLONE_BUF + idx) * (w + GAP);
+    }
+
+    function applyOffset(px, animate) {
+      track.style.transition = animate
+        ? 'transform 0.42s cubic-bezier(0.77,0,0.175,1)'
+        : 'none';
+      track.style.transform = `translateX(${-px}px)`;
+    }
+
+    function snapToReal(idx, animate) {
+      realIdx = ((idx % N) + N) % N;
+      applyOffset(offsetForReal(realIdx), animate);
+    }
+
+    // ── Init
+    setWidths();
+    applyOffset(offsetForReal(0), false);
+
+    // ── Resize
+    window.addEventListener('resize', () => {
+      setWidths();
+      applyOffset(offsetForReal(realIdx), false);
+    });
+
+    // ── Drag / swipe logic
+    let dragStartX  = 0;
+    let dragStartOff = 0;
+    let isDragging  = false;
+    let didMove     = false;
+    const THRESHOLD = 40; // px to trigger slide
+
+    function currentOffset() {
+      return offsetForReal(realIdx);
+    }
+
+    function onDragStart(x) {
+      isDragging   = true;
+      didMove      = false;
+      dragStartX   = x;
+      dragStartOff = currentOffset();
+      track.style.transition = 'none';
+      viewport.classList.add('dragging');
+    }
+
+    function onDragMove(x) {
+      if (!isDragging) return;
+      const delta = x - dragStartX;
+      if (Math.abs(delta) > 4) didMove = true;
+      track.style.transform = `translateX(${-(dragStartOff - delta)}px)`;
+    }
+
+    function onDragEnd(x) {
+      if (!isDragging) return;
+      isDragging = false;
+      viewport.classList.remove('dragging');
+      const delta = x - dragStartX;
+      if (Math.abs(delta) > THRESHOLD) {
+        const steps = Math.round(Math.abs(delta) / (cardWidth() + GAP)) || 1;
+        snapToReal(delta < 0 ? realIdx + steps : realIdx - steps, true);
+      } else {
+        snapToReal(realIdx, true); // snap back
+      }
+    }
+
+    // Mouse
+    viewport.addEventListener('mousedown', e => { onDragStart(e.clientX); });
+    window.addEventListener('mousemove',  e => { if (isDragging) onDragMove(e.clientX); });
+    window.addEventListener('mouseup',    e => { onDragEnd(e.clientX); });
+    // Prevent text selection while dragging
+    viewport.addEventListener('dragstart', e => e.preventDefault());
+    // Prevent click-through when we dragged
+    viewport.addEventListener('click', e => { if (didMove) e.stopPropagation(); }, true);
+
+    // Touch
+    viewport.addEventListener('touchstart', e => { onDragStart(e.touches[0].clientX); }, { passive: true });
+    viewport.addEventListener('touchmove',  e => { onDragMove(e.touches[0].clientX); },  { passive: true });
+    viewport.addEventListener('touchend',   e => { onDragEnd(e.changedTouches[0].clientX); });
+
+  })();
+
+  /* ═══════════════════════════════════════
+     MAIN PAGE SCROLL LOGIC (unchanged)
+  ═══════════════════════════════════════ */
+  const heroBg   = document.getElementById('heroBg');
+  const heroVeil = document.getElementById('heroVeil');
+  const notebook = document.getElementById('notebook');
+  const nav      = document.getElementById('nav');
+
+  function onScroll() {
+    const scrollY = window.scrollY;
+    const vh = window.innerHeight;
+    const progress = Math.min(1, scrollY / (vh * 0.7));
+    heroVeil.style.opacity = progress;
+    const scale = 1 + progress * 1.4;
+    notebook.style.transform = `scale(${scale})`;
+    const bgY = scrollY * 0.35;
+    heroBg.style.transform = `translateY(${bgY}px) scale(1.08)`;
+    nav.classList.toggle('scrolled', scrollY > 60);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Scroll-reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
+        const idx = siblings.indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('in'), idx * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Smooth scroll for anchor links on home page
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id === '#') return;
+      const target = document.querySelector(id);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+})();
+</script>
+<!-- ═══════════════════════════════════════════════
+     PAGE: DIAGNOSTIC
+═══════════════════════════════════════════════ -->
+<div id="page-diag" style="display:none;">
+  <div class="diag-page">
+
+    <!-- Topbar -->
+    <div class="diag-topbar">
+      <button class="btn-back" id="diagBackBtn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Назад
+      </button>
+      <a class="nav-logo" href="javascript:Diag.hide()">danil <em>in</em> language</a>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="diagQuiz" class="diag-content">
+      <div class="diag-meta">
+        <span id="diagCounter">Вопрос 1 из 10</span>
+        <span id="diagLevel" class="diag-level-badge">A1</span>
+      </div>
+
+      <div class="diag-progress-wrap">
+        <div class="diag-progress-fill" id="diagProgressFill"></div>
+      </div>
+
+      <div class="diag-card" id="diagCard">
+        <div class="diag-card-label">Переведи на русский:</div>
+        <div class="diag-word" id="diagWord"></div>
+      </div>
+
+      <div class="diag-answers" id="diagAnswers"></div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="diagResult" class="diag-content" style="display:none;">
+      <div class="result-emoji" id="diagEmoji">🎓</div>
+      <p class="diag-result-sub">Диагностика завершена</p>
+      <h2 class="diag-result-title">Твой уровень:</h2>
+      <div class="diag-level-big" id="diagLevelBig">Начинающий</div>
+      <div class="diag-level-code" id="diagLevelCode">A1–A2</div>
+      <p class="diag-result-desc" id="diagResultDesc"></p>
+      <div class="diag-score-row">
+        <div class="diag-score-box">
+          <div class="diag-score-num" id="diagScoreNum">7</div>
+          <div class="diag-score-lbl">правильных из 10</div>
+        </div>
+      </div>
+      <button class="btn-primary" style="margin-top:40px;" onclick="Plan.show()">
+        Начать обучение
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="btn-ghost" style="margin-top:14px;" onclick="Diag.restart()">Пройти снова</button>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ─── DIAGNOSTIC PAGE ─── */
+.diag-page {
+  min-height: 100vh;
+  background: var(--bg-deep);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: var(--text);
+}
+
+.diag-topbar {
+  padding: 22px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(237,237,243,0.07);
+  background: rgba(23,23,33,0.9);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* reuse btn-back, nav-logo, btn-primary, btn-ghost from existing styles */
+
+.diag-content {
+  flex: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 56px 32px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Meta row */
+.diag-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 14px;
+}
+#diagCounter {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+.diag-level-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  background: rgba(82,102,235,0.14);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* Progress bar */
+.diag-progress-wrap {
+  width: 100%;
+  height: 3px;
+  background: rgba(237,237,243,0.1);
+  border-radius: 2px;
+  margin-bottom: 48px;
+  overflow: hidden;
+}
+.diag-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* Question card */
+.diag-card {
+  width: 100%;
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.08);
+  border-radius: 24px;
+  padding: 52px 44px;
+  text-align: center;
+  margin-bottom: 32px;
+  box-shadow: 0 20px 70px rgba(0,0,0,0.3);
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.diag-card.out {
+  transform: scale(0.95) translateY(-6px);
+  opacity: 0;
+}
+.diag-card.in-from {
+  transform: scale(0.95) translateY(6px);
+  opacity: 0;
+}
+.diag-card-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+.diag-word {
+  font-size: clamp(2.4rem, 7vw, 4.2rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+/* Answer buttons */
+.diag-answers {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.diag-ans-btn {
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.1);
+  border-radius: 14px;
+  padding: 20px 20px;
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.18s, background 0.18s, transform 0.12s;
+  line-height: 1.3;
+}
+.diag-ans-btn:hover:not(:disabled) {
+  border-color: rgba(82,102,235,0.5);
+  background: rgba(82,102,235,0.08);
+  transform: translateY(-2px);
+}
+.diag-ans-btn.correct {
+  border-color: #3ecf8e;
+  background: rgba(62,207,142,0.12);
+  color: #3ecf8e;
+  font-weight: 600;
+}
+.diag-ans-btn.wrong {
+  border-color: #f66;
+  background: rgba(255,102,102,0.1);
+  color: #f66;
+}
+.diag-ans-btn:disabled { cursor: default; }
+
+/* Result screen */
+.diag-result-sub {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  margin-top: 8px;
+}
+.diag-result-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.diag-level-big {
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.diag-level-code {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+.diag-result-desc {
+  font-size: 15px;
+  color: var(--text-dim);
+  text-align: center;
+  max-width: 420px;
+  line-height: 1.65;
+  margin-bottom: 32px;
+}
+.diag-score-row {
+  display: flex;
+  justify-content: center;
+}
+.diag-score-box {
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.08);
+  border-radius: 18px;
+  padding: 28px 52px;
+  text-align: center;
+}
+.diag-score-num {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.diag-score-lbl {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* result-emoji reused from earlier styles */
+
+@media (max-width: 600px) {
+  .diag-topbar { padding: 16px 20px; }
+  .diag-content { padding: 36px 20px 60px; }
+  .diag-card { padding: 36px 24px; }
+  .diag-answers { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+/* ═══════════════════════════════════════
+   DIAGNOSTIC MODULE
+═══════════════════════════════════════ */
+const Diag = (() => {
+
+  const QUESTIONS = [
+    // A1
+    { level:'A1', word:'cat', options:['кошка','собака','рыба','дом'], answer:'кошка' },
+    { level:'A1', word:'hello', options:['пока','привет','спасибо','да'], answer:'привет' },
+    { level:'A1', word:'water', options:['огонь','земля','вода','воздух'], answer:'вода' },
+    // A2
+    { level:'A2', word:'family', options:['друг','семья','школа','работа'], answer:'семья' },
+    { level:'A2', word:'always', options:['никогда','иногда','всегда','редко'], answer:'всегда' },
+    { level:'A2', word:'hungry', options:['усталый','голодный','злой','весёлый'], answer:'голодный' },
+    // B1
+    { level:'B1', word:'achieve', options:['потерять','достичь','искать','создать'], answer:'достичь' },
+    { level:'B1', word:'despite', options:['из-за','благодаря','несмотря на','вместо'], answer:'несмотря на' },
+    { level:'B1', word:'recommend', options:['запрещать','рекомендовать','требовать','предлагать'], answer:'рекомендовать' },
+    { level:'B1', word:'opportunity', options:['проблема','возможность','результат','обязанность'], answer:'возможность' },
+  ];
+
+  const homeEls = () => [
+    document.getElementById('nav'),
+    document.getElementById('hero'),
+    document.getElementById('main'),
+  ];
+  const pageDiag   = () => document.getElementById('page-diag');
+  const diagQuiz   = () => document.getElementById('diagQuiz');
+  const diagResult = () => document.getElementById('diagResult');
+
+  let qIndex  = 0;
+  let score   = 0;
+  let locked  = false;
+
+  function setHomeVisible(v) {
+    homeEls().forEach(el => { if (el) el.style.display = v ? '' : 'none'; });
+  }
+
+  function show() {
+    setHomeVisible(false);
+    pageDiag().style.display = 'block';
+    // Hide any other SPA pages
+    ['page-lessons','page-cards','page-result'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    window.scrollTo(0, 0);
+    restart();
+  }
+
+  function hide() {
+    setHomeVisible(true);
+    pageDiag().style.display = 'none';
+    window.scrollTo(0, 0);
+    window.dispatchEvent(new Event('scroll'));
+  }
+
+  function restart() {
+    qIndex = 0;
+    score  = 0;
+    locked = false;
+    diagQuiz().style.display   = 'flex';
+    diagResult().style.display = 'none';
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    const q       = QUESTIONS[qIndex];
+    const total   = QUESTIONS.length;
+    const counter = document.getElementById('diagCounter');
+    const badge   = document.getElementById('diagLevel');
+    const fill    = document.getElementById('diagProgressFill');
+    const wordEl  = document.getElementById('diagWord');
+    const answers = document.getElementById('diagAnswers');
+
+    counter.textContent = `Вопрос ${qIndex + 1} из ${total}`;
+    badge.textContent   = q.level;
+    fill.style.width    = `${(qIndex / total) * 100}%`;
+    wordEl.textContent  = q.word;
+
+    // Shuffle options
+    const opts = [...q.options].sort(() => Math.random() - 0.5);
+    answers.innerHTML = '';
+    opts.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className   = 'diag-ans-btn';
+      btn.textContent = opt;
+      btn.onclick     = () => handleAnswer(btn, opt, q.answer, answers);
+      answers.appendChild(btn);
+    });
+    locked = false;
+  }
+
+  function handleAnswer(btn, chosen, correct, container) {
+    if (locked) return;
+    locked = true;
+    const allBtns = container.querySelectorAll('.diag-ans-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    const isCorrect = chosen === correct;
+    if (isCorrect) {
+      btn.classList.add('correct');
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+    }
+
+    const delay = isCorrect ? 1000 : 1500;
+    setTimeout(() => advance(), delay);
+  }
+
+  function advance() {
+    const card = document.getElementById('diagCard');
+    card.classList.add('out');
+    setTimeout(() => {
+      qIndex++;
+      if (qIndex >= QUESTIONS.length) {
+        document.getElementById('diagProgressFill').style.width = '100%';
+        setTimeout(() => showResult(), 150);
+        return;
+      }
+      card.classList.remove('out');
+      card.classList.add('in-from');
+      renderQuestion();
+      requestAnimationFrame(() => requestAnimationFrame(() => card.classList.remove('in-from')));
+    }, 220);
+  }
+
+  function showResult() {
+    diagQuiz().style.display   = 'none';
+    diagResult().style.display = 'flex';
+
+    const total = QUESTIONS.length;
+    const pct   = score / total;
+
+    let emoji, levelName, levelCode, desc;
+    if (pct <= 0.3) {
+      emoji = '🌱'; levelName = 'Начинающий'; levelCode = 'A1';
+      desc = 'Ты только начинаешь — это отлично! У тебя всё впереди. Мы начнём с самых основ и будем двигаться вперёд в комфортном темпе.';
+    } else if (pct <= 0.6) {
+      emoji = '📘'; levelName = 'Элементарный'; levelCode = 'A2';
+      desc = 'Базу ты уже знаешь. Теперь важно закрепить грамматику и начать говорить — именно этим мы и займёмся.';
+    } else if (pct <= 0.8) {
+      emoji = '🚀'; levelName = 'Средний'; levelCode = 'B1';
+      desc = 'Хороший уровень! Ты понимаешь язык и можешь общаться. Наш курс поможет тебе выйти на уверенный B2.';
+    } else {
+      emoji = '🏆'; levelName = 'Выше среднего'; levelCode = 'B2+';
+      desc = 'Впечатляющий результат! Ты знаешь язык на хорошем уровне. Мы поможем тебе отточить навыки и говорить как носитель.';
+    }
+
+    document.getElementById('diagEmoji').textContent     = emoji;
+    document.getElementById('diagLevelBig').textContent  = levelName;
+    document.getElementById('diagLevelCode').textContent = levelCode;
+    document.getElementById('diagResultDesc').textContent = desc;
+    document.getElementById('diagScoreNum').textContent  = score;
+
+    // ── Сохраняем результат диагностики в localStorage ──
+    // Нормализуем 4 градации levelName в 3 уровня программы:
+    // Начинающий/Элементарный → Начинающий, Средний → Средний, Выше среднего → Продвинутый
+    const normalizedLevel =
+      (levelName === 'Начинающий' || levelName === 'Элементарный') ? 'Начинающий' :
+      (levelName === 'Средний') ? 'Средний' : 'Продвинутый';
+
+    try {
+      const diagResultData = {
+        level: normalizedLevel,       // Начинающий / Средний / Продвинутый
+        levelDisplay: levelName,      // полное отображаемое название
+        levelCode: levelCode,         // A1 / A2 / B1 / B2+
+        score: score,
+        total: total,
+        savedAt: new Date().toISOString(),
+      };
+      localStorage.setItem('dil_diagResult', JSON.stringify(diagResultData));
+    } catch (e) { /* localStorage недоступен — просто игнорируем */ }
+  }
+
+  // Wire back button
+  document.getElementById('diagBackBtn').onclick = hide;
+
+  return { show, hide, restart };
+})();
+</script>
+<!-- ═══════════════════════════════════════════════
+     PAGE: PERSONAL PLAN (3-step onboarding)
+═══════════════════════════════════════════════ -->
+<div id="page-plan" style="display:none;">
+  <div class="ob-shell">
+
+    <!-- Top bar -->
+    <div class="ob-topbar">
+      <button class="btn-back" id="planBackBtn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Назад
+      </button>
+      <a class="nav-logo" href="javascript:Plan.hide()">danil <em>in</em> language</a>
+    </div>
+
+    <!-- Viewport that slides steps -->
+    <div class="ob-viewport" id="obViewport">
+
+      <!-- STEP 1 -->
+      <div class="ob-step" id="obStep1">
+        <div class="ob-step-inner">
+          <div class="ob-progress-wrap">
+            <div class="ob-progress-bar" style="width:33.3%"></div>
+          </div>
+          <p class="ob-step-label">Шаг 1 из 3</p>
+          <h2 class="ob-step-title">Какая у тебя<br><strong>цель?</strong></h2>
+          <p class="ob-step-hint">Выбери одно</p>
+          <div class="ob-cards ob-single" id="obGoalCards">
+            <button class="ob-card" data-val="Хочу говорить свободно">
+              <span class="ob-card-icon">🗣️</span>
+              <span class="ob-card-label">Хочу говорить свободно</span>
+            </button>
+            <button class="ob-card" data-val="Для работы и карьеры">
+              <span class="ob-card-icon">💼</span>
+              <span class="ob-card-label">Для работы и карьеры</span>
+            </button>
+            <button class="ob-card" data-val="Для путешествий">
+              <span class="ob-card-icon">✈️</span>
+              <span class="ob-card-label">Для путешествий</span>
+            </button>
+            <button class="ob-card" data-val="Сдать экзамен">
+              <span class="ob-card-icon">📝</span>
+              <span class="ob-card-label">Сдать экзамен</span>
+            </button>
+          </div>
+          <button class="btn-primary ob-next-btn" id="obNext1" disabled onclick="Plan.goStep(2)">
+            Далее
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="ob-step" id="obStep2">
+        <div class="ob-step-inner">
+          <div class="ob-progress-wrap">
+            <div class="ob-progress-bar" style="width:66.6%"></div>
+          </div>
+          <p class="ob-step-label">Шаг 2 из 3</p>
+          <h2 class="ob-step-title">Что хочешь<br><strong>прокачать?</strong></h2>
+          <p class="ob-step-hint">Можно несколько</p>
+          <div class="ob-cards ob-multi" id="obSkillCards">
+            <button class="ob-card" data-val="Говорить">
+              <span class="ob-card-icon">🎤</span>
+              <span class="ob-card-label">Говорить</span>
+            </button>
+            <button class="ob-card" data-val="Читать">
+              <span class="ob-card-icon">📖</span>
+              <span class="ob-card-label">Читать</span>
+            </button>
+            <button class="ob-card" data-val="Грамматику">
+              <span class="ob-card-icon">✏️</span>
+              <span class="ob-card-label">Грамматику</span>
+            </button>
+            <button class="ob-card" data-val="Словарный запас">
+              <span class="ob-card-icon">🧠</span>
+              <span class="ob-card-label">Словарный запас</span>
+            </button>
+          </div>
+          <button class="btn-primary ob-next-btn" id="obNext2" disabled onclick="Plan.goStep(3)">
+            Далее
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="ob-step" id="obStep3">
+        <div class="ob-step-inner">
+          <div class="ob-progress-wrap">
+            <div class="ob-progress-bar" style="width:100%"></div>
+          </div>
+          <p class="ob-step-label">Шаг 3 из 3</p>
+          <h2 class="ob-step-title">Сколько времени<br><strong>в день?</strong></h2>
+          <p class="ob-step-hint">Выбери одно</p>
+          <div class="ob-cards ob-single" id="obTimeCards">
+            <button class="ob-card" data-val="10 минут">
+              <span class="ob-card-icon">⚡</span>
+              <span class="ob-card-label">10 минут</span>
+              <span class="ob-card-sub">Быстрый старт</span>
+            </button>
+            <button class="ob-card" data-val="20 минут">
+              <span class="ob-card-icon">🔥</span>
+              <span class="ob-card-label">20 минут</span>
+              <span class="ob-card-sub">Оптимально</span>
+            </button>
+            <button class="ob-card" data-val="30+ минут">
+              <span class="ob-card-icon">🚀</span>
+              <span class="ob-card-label">30+ минут</span>
+              <span class="ob-card-sub">Максимум прогресса</span>
+            </button>
+          </div>
+          <button class="btn-primary ob-next-btn" id="obNext3" disabled onclick="Plan.showResult()">
+            Составить план
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="ob-step" id="obStepResult">
+        <div class="ob-step-inner ob-result-inner">
+          <div class="ob-progress-wrap">
+            <div class="ob-progress-bar" style="width:100%;background:linear-gradient(90deg,#5266eb,#89d6a8)"></div>
+          </div>
+          <div class="ob-result-emoji">🎯</div>
+          <p class="ob-step-label" style="text-align:center;margin-bottom:8px;">Всё готово</p>
+          <h2 class="ob-step-title" style="text-align:center;">Твой план<br><strong>готов</strong></h2>
+
+          <div class="ob-result-card" id="obResultCard">
+            <!-- filled by JS -->
+          </div>
+
+          <button class="btn-primary ob-next-btn" onclick="Plan.startLessons()">
+            Приступить к урокам
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="btn-ghost" style="margin-top:14px;" onclick="Plan.restart()">Начать заново</button>
+        </div>
+      </div>
+
+    </div><!-- /ob-viewport -->
+  </div>
+</div>
+
+<style>
+/* ════════════════════════════════════
+   ONBOARDING SHELL
+════════════════════════════════════ */
+.ob-shell {
+  min-height: 100vh;
+  background: var(--bg-deep);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: var(--text);
+  overflow: hidden;
+}
+
+.ob-topbar {
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(237,237,243,0.07);
+  background: rgba(23,23,33,0.9);
+  backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+/* ── Sliding viewport ── */
+.ob-viewport {
+  flex: 1;
+  display: flex;
+  /* steps sit side-by-side; we translate to show the active one */
+  width: 400%; /* 4 panels */
+  transition: transform 0.52s cubic-bezier(0.77, 0, 0.175, 1);
+  will-change: transform;
+}
+
+.ob-step {
+  width: 25%; /* 1/4 of viewport = full screen width */
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 0 24px 60px;
+}
+
+.ob-step-inner {
+  width: 100%;
+  max-width: 620px;
+  padding-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ob-result-inner {
+  padding-top: 36px;
+}
+
+/* ── Progress bar ── */
+.ob-progress-wrap {
+  width: 100%;
+  height: 3px;
+  background: rgba(237,237,243,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.ob-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* ── Step labels & titles ── */
+.ob-step-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  align-self: flex-start;
+}
+.ob-step-title {
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  align-self: flex-start;
+}
+.ob-step-title strong { font-weight: 700; }
+.ob-step-hint {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 36px;
+  align-self: flex-start;
+}
+
+/* ── Choice cards grid ── */
+.ob-cards {
+  width: 100%;
+  display: grid;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+.ob-single { grid-template-columns: repeat(2, 1fr); }
+.ob-multi  { grid-template-columns: repeat(2, 1fr); }
+
+@media (max-width: 500px) {
+  .ob-single { grid-template-columns: 1fr; }
+  .ob-multi  { grid-template-columns: 1fr 1fr; }
+}
+
+.ob-card {
+  background: #272735;
+  border: 1.5px solid rgba(237,237,243,0.08);
+  border-radius: 16px;
+  padding: 24px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.14s, box-shadow 0.18s;
+  font-family: 'Manrope', sans-serif;
+  color: var(--text);
+  text-align: center;
+}
+.ob-card:hover {
+  border-color: rgba(82,102,235,0.4);
+  background: #2e2e40;
+  transform: translateY(-2px);
+}
+.ob-card.selected {
+  border-color: var(--accent);
+  background: rgba(82,102,235,0.14);
+  box-shadow: 0 0 0 1px rgba(82,102,235,0.35), 0 8px 28px rgba(82,102,235,0.2);
+}
+.ob-card-icon { font-size: 28px; line-height: 1; }
+.ob-card-label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ob-card-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+/* ── Next button ── */
+.ob-next-btn {
+  font-size: 15px;
+  padding: 16px 40px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+}
+.ob-next-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Result screen ── */
+.ob-result-emoji {
+  font-size: 60px;
+  margin-bottom: 16px;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.ob-result-card {
+  width: 100%;
+  background: #272735;
+  border: 1px solid rgba(82,102,235,0.3);
+  border-radius: 20px;
+  padding: 36px 36px 32px;
+  margin: 28px 0 36px;
+  box-shadow: 0 0 60px rgba(82,102,235,0.1), 0 20px 50px rgba(0,0,0,0.3);
+  text-align: left;
+  animation: planIn 0.45s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes planIn {
+  from { transform: scale(0.95) translateY(12px); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.ob-result-summary {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-mid);
+  margin-bottom: 28px;
+}
+.ob-result-summary strong { color: var(--text); font-weight: 700; }
+
+.ob-result-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ob-result-chip {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: rgba(82,102,235,0.12);
+  border: 1px solid rgba(82,102,235,0.25);
+  padding: 5px 14px;
+  border-radius: 20px;
+}
+
+@media (max-width: 600px) {
+  .ob-topbar { padding: 16px 20px; }
+  .ob-step { padding: 0 20px 60px; }
+  .ob-step-inner { padding-top: 36px; }
+  .ob-result-card { padding: 28px 22px; }
+}
+</style>
+
+<script>
+/* ═══════════════════════════════════════
+   ONBOARDING / PERSONAL PLAN MODULE
+═══════════════════════════════════════ */
+const Plan = (() => {
+
+  // ── State ──
+  let diagLevel  = 'Начинающий';
+  let goal       = '';
+  let skills     = [];
+  let time       = '';
+  let activeStep = 1; // 1,2,3,'result'
+
+  // ── DOM helpers ──
+  const $ = id => document.getElementById(id);
+  const pagePlan = () => $('page-plan');
+  const pageDiag = () => $('page-diag');
+  const viewport = () => $('obViewport');
+
+  // step index → translateX offset (each panel = 25% of 400% width = 100vw)
+  const STEP_OFFSETS = { 1: 0, 2: -25, 3: -50, result: -75 };
+
+  function slideTo(step) {
+    activeStep = step;
+    viewport().style.transform = `translateX(${STEP_OFFSETS[step]}%)`;
+    window.scrollTo(0, 0);
+  }
+
+  // ── Single-select setup ──
+  function setupSingle(containerId, nextBtnId, onSelect) {
+    const container = $(containerId);
+    const nextBtn   = $(nextBtnId);
+    container.querySelectorAll('.ob-card').forEach(card => {
+      card.addEventListener('click', () => {
+        container.querySelectorAll('.ob-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        onSelect(card.dataset.val);
+        nextBtn.disabled = false;
+      });
+    });
+  }
+
+  // ── Multi-select setup ──
+  function setupMulti(containerId, nextBtnId, onChange) {
+    const container = $(containerId);
+    const nextBtn   = $(nextBtnId);
+    container.querySelectorAll('.ob-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('selected');
+        const selected = [...container.querySelectorAll('.ob-card.selected')].map(c => c.dataset.val);
+        onChange(selected);
+        nextBtn.disabled = selected.length === 0;
+      });
+    });
+  }
+
+  // ── Wire interactions ──
+  function wireSteps() {
+    setupSingle('obGoalCards',  'obNext1', val => { goal = val; });
+    setupMulti ('obSkillCards', 'obNext2', vals => { skills = vals; });
+    setupSingle('obTimeCards',  'obNext3', val => { time = val; });
+  }
+
+  // ── Reset all selections ──
+  function resetSelections() {
+    ['obGoalCards','obSkillCards','obTimeCards'].forEach(id => {
+      $(id).querySelectorAll('.ob-card').forEach(c => c.classList.remove('selected'));
+    });
+    ['obNext1','obNext2','obNext3'].forEach(id => { $(id).disabled = true; });
+    goal = ''; skills = []; time = '';
+  }
+
+  // ── Build result summary ──
+  function buildSummary() {
+    // Duration logic based on time + level
+    const durationMap = {
+      '10 минут':  { 'Начинающий': '6 месяцев', 'Элементарный': '5 месяцев', 'Средний': '6 месяцев', 'Выше среднего': '5 месяцев' },
+      '20 минут':  { 'Начинающий': '3 месяца',  'Элементарный': '3 месяца',  'Средний': '4 месяца',  'Выше среднего': '3 месяца' },
+      '30+ минут': { 'Начинающий': '2 месяца',  'Элементарный': '2 месяца',  'Средний': '3 месяца',  'Выше среднего': '2 месяца' },
+    };
+    const duration = (durationMap[time] || {})[diagLevel] || '3 месяца';
+
+    // Goal phrase
+    const goalPhrases = {
+      'Хочу говорить свободно': 'говорить свободно',
+      'Для работы и карьеры':   'работать и строить карьеру на английском',
+      'Для путешествий':        'путешествовать без языкового барьера',
+      'Сдать экзамен':          'сдать экзамен на отлично',
+    };
+    const goalText = goalPhrases[goal] || goal.toLowerCase();
+
+    // Skills phrase
+    const skillsText = skills.length === 1
+      ? `фокус на ${skills[0].toLowerCase()}`
+      : `фокус на ${skills.slice(0, -1).map(s => s.toLowerCase()).join(', ')} и ${skills[skills.length-1].toLowerCase()}`;
+
+    const summary = `Ты хочешь <strong>${goalText}</strong>, ${skillsText}, <strong>${time} в день</strong>. Программа рассчитана на <strong>${duration}</strong>.`;
+
+    // Level → program (нормализация к 3 уровням: Начинающий / Средний / Продвинутый)
+    const normalizedLevel =
+      (diagLevel === 'Начинающий' || diagLevel === 'Элементарный') ? 'Начинающий' :
+      (diagLevel === 'Средний') ? 'Средний' :
+      (diagLevel === 'Выше среднего' || diagLevel === 'Продвинутый') ? 'Продвинутый' : 'Начинающий';
+
+    const programs = {
+      'Начинающий': 'С нуля до разговорного',
+      'Средний':    'Intermediate Boost',
+      'Продвинутый':'Business English',
+    };
+    const program = programs[normalizedLevel];
+
+    $('obResultCard').innerHTML = `
+      <p class="ob-result-summary">${summary}</p>
+      <div class="ob-result-chips">
+        <span class="ob-result-chip">${program}</span>
+        <span class="ob-result-chip">Уровень: ${diagLevel}</span>
+        <span class="ob-result-chip">${time} в день</span>
+        ${skills.map(s => `<span class="ob-result-chip">${s}</span>`).join('')}
+      </div>
+    `;
+
+    // ── Сохраняем персональный план в localStorage ──
+    try {
+      const planData = {
+        level: normalizedLevel,    // Начинающий / Средний / Продвинутый
+        program: program,          // название программы
+        goal: goal,
+        skills: skills,
+        time: time,
+        duration: duration,
+        savedAt: new Date().toISOString(),
+      };
+      localStorage.setItem('dil_userPlan', JSON.stringify(planData));
+    } catch (e) { /* localStorage недоступен — просто игнорируем */ }
+  }
+
+  // ── Init ──
+  wireSteps();
+  $('planBackBtn').addEventListener('click', hide);
+
+  // ── Public API ──
+  function show() {
+    // Пытаемся взять уровень из localStorage (сохранён после диагностики),
+    // иначе берём из текста на экране результата диагностики
+    try {
+      const saved = JSON.parse(localStorage.getItem('dil_diagResult') || 'null');
+      diagLevel = (saved && saved.levelDisplay) || ($('diagLevelBig') || {}).textContent?.trim() || 'Начинающий';
+    } catch (e) {
+      diagLevel = ($('diagLevelBig') || {}).textContent?.trim() || 'Начинающий';
+    }
+    pageDiag().style.display  = 'none';
+    pagePlan().style.display  = 'block';
+    window.scrollTo(0, 0);
+    slideTo(1);
+  }
+
+  function hide() {
+    pagePlan().style.display  = 'none';
+    pageDiag().style.display  = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  function goStep(n) {
+    slideTo(n);
+  }
+
+  function showResult() {
+    buildSummary();
+    slideTo('result');
+  }
+
+  function restart() {
+    resetSelections();
+    slideTo(1);
+  }
+
+  function startLessons() {
+    // Переходим на страницу со списком из 5 уроков (как кнопка "Уроки" в шапке).
+    // App.showLessons() сам определит нужную программу по сохранённому уровню диагностики.
+    pagePlan().style.display = 'none';
+    if (typeof App !== 'undefined' && App.showLessons) {
+      App.showLessons();
+    }
+  }
+
+  return { show, hide, goStep, showResult, restart, startLessons };
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: PROFILE / ЛИЧНЫЙ КАБИНЕТ
+═══════════════════════════════════════════════ -->
+<div id="page-profile" style="display:none;">
+  <div class="app-page">
+    <div class="app-topbar">
+      <button class="btn-back" onclick="Profile.hide()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Назад
+      </button>
+      <a class="nav-logo" href="javascript:Profile.hide()">danil <em>in</em> language</a>
+    </div>
+
+    <div class="app-content profile-content">
+      <p class="section-label" style="text-align:center;margin-bottom:12px;">Личный кабинет</p>
+      <h1 class="lessons-title">Твой <strong>прогресс</strong></h1>
+
+      <!-- Level badge -->
+      <div class="profile-level-card" id="profileLevelCard">
+        <div class="profile-level-icon" id="profileLevelIcon">🌱</div>
+        <div>
+          <div class="profile-level-label">Текущий уровень</div>
+          <div class="profile-level-name" id="profileLevelName">Диагностика не пройдена</div>
+        </div>
+        <button class="btn-ghost profile-retake-btn" onclick="Diag.show()">Пройти диагностику</button>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="profile-stats-grid">
+        <div class="profile-stat-card">
+          <div class="profile-stat-icon">🔥</div>
+          <div class="profile-stat-num" id="profileStreak">0</div>
+          <div class="profile-stat-label">дней подряд</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-icon">📚</div>
+          <div class="profile-stat-num" id="profileLessons">0</div>
+          <div class="profile-stat-label">уроков пройдено</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-icon">🧠</div>
+          <div class="profile-stat-num" id="profileWords">0</div>
+          <div class="profile-stat-label">слов выучено</div>
+        </div>
+      </div>
+
+      <p class="profile-hint" id="profileHint"></p>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ─── PROFILE PAGE ─── */
+.profile-content {
+  text-align: center;
+}
+
+.profile-level-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: var(--bg-base);
+  border: 1px solid rgba(82,102,235,0.25);
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin: 40px 0 32px;
+  text-align: left;
+}
+.profile-level-icon {
+  font-size: 34px;
+  flex-shrink: 0;
+}
+.profile-level-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.profile-level-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.profile-retake-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 12px;
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.profile-stat-card {
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.08);
+  border-radius: 18px;
+  padding: 28px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.profile-stat-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+.profile-stat-num {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  line-height: 1;
+}
+.profile-stat-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.profile-hint {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .profile-level-card { flex-wrap: wrap; }
+  .profile-retake-btn { margin-left: 0; width: 100%; }
+  .profile-stats-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+/* ═══════════════════════════════════════
+   PROFILE / ЛИЧНЫЙ КАБИНЕТ + STREAK
+═══════════════════════════════════════ */
+const Profile = (() => {
+
+  const pageProfile = () => document.getElementById('page-profile');
+  const homeEls = () => [
+    document.getElementById('nav'),
+    document.getElementById('hero'),
+    document.getElementById('main'),
+  ];
+
+  // Слово-банки по программам — нужны, чтобы посчитать число выученных слов
+  function getProgramsData() {
+    // LESSON_PROGRAMS определён в основном скрипте App; он в той же глобальной области видимости (без var/let на window — но т.к. оба <script> работают в одном document, переменная видна только если объявлена через var в глобальном скоупе модуля).
+    // Чтобы не зависеть от внутренней области видимости App, дублируем счётчик слов через App, если доступен.
+    return (typeof window.__LESSON_PROGRAMS_REF === 'object' && window.__LESSON_PROGRAMS_REF) || null;
+  }
+
+  function countCompletedLessonsAndWords() {
+    let allCompleted = {};
+    try {
+      allCompleted = JSON.parse(localStorage.getItem('dil_completedLessons') || '{}');
+      if (!allCompleted || typeof allCompleted !== 'object' || Array.isArray(allCompleted)) allCompleted = {};
+    } catch (e) { allCompleted = {}; }
+
+    let totalLessons = 0;
+    let totalWords    = 0;
+
+    Object.keys(allCompleted).forEach(programName => {
+      const progData = allCompleted[programName];
+
+      if (progData && typeof progData === 'object' && !Array.isArray(progData)) {
+        // Новый формат: { "индексУрока": лучшийРезультат }
+        Object.keys(progData).forEach(idxKey => {
+          const bestScore = progData[idxKey];
+          if (typeof bestScore === 'number' && bestScore >= 7) {
+            totalLessons += 1;
+            totalWords   += bestScore; // "слов выучено" = сумма правильных ответов
+          }
+        });
+      } else if (Array.isArray(progData)) {
+        // Старый формат (на случай данных из предыдущей версии) — фоллбек на 10 слов/урок
+        totalLessons += progData.length;
+        totalWords   += progData.length * 10;
+      }
+    });
+
+    return { totalLessons, totalWords };
+  }
+
+  // ── Streak: считаем дни подряд захода на сайт ──
+  function updateStreak() {
+    const todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    let streak = 1;
+    try {
+      const lastVisit = localStorage.getItem('dil_lastVisit');
+      const savedStreak = parseInt(localStorage.getItem('dil_streak') || '0', 10);
+
+      if (lastVisit === todayStr) {
+        // Уже заходил сегодня — стрик не меняем
+        streak = savedStreak > 0 ? savedStreak : 1;
+      } else if (lastVisit) {
+        const prevDate = new Date(lastVisit + 'T00:00:00');
+        const curDate  = new Date(todayStr + 'T00:00:00');
+        const diffDays = Math.round((curDate - prevDate) / 86400000);
+
+        if (diffDays === 1) {
+          // Зашёл на следующий календарный день — стрик растёт
+          streak = (savedStreak > 0 ? savedStreak : 0) + 1;
+        } else if (diffDays > 1) {
+          // Пропустил день (или больше) — стрик сбрасывается
+          streak = 1;
+        } else {
+          // diffDays <= 0 (например, переведены часы) — не трогаем стрик резко
+          streak = savedStreak > 0 ? savedStreak : 1;
+        }
+      } else {
+        // Первый визит
+        streak = 1;
+      }
+
+      localStorage.setItem('dil_lastVisit', todayStr);
+      localStorage.setItem('dil_streak', String(streak));
+    } catch (e) { /* localStorage недоступен — игнорируем */ }
+
+    return streak;
+  }
+
+  function getStreak() {
+    let streak = 0;
+    try { streak = parseInt(localStorage.getItem('dil_streak') || '0', 10); } catch (e) {}
+    return streak || 0;
+  }
+
+  // ── Рендер страницы профиля ──
+  function render() {
+    // Уровень пользователя
+    let diagData = null;
+    try {
+      diagData = JSON.parse(localStorage.getItem('dil_userPlan') || localStorage.getItem('dil_diagResult') || 'null');
+    } catch (e) { diagData = null; }
+
+    const levelCard = document.getElementById('profileLevelCard');
+    const levelIcon = document.getElementById('profileLevelIcon');
+    const levelName = document.getElementById('profileLevelName');
+    const retakeBtn = levelCard ? levelCard.querySelector('.profile-retake-btn') : null;
+
+    if (diagData && diagData.level) {
+      const iconMap = { 'Начинающий': '🌱', 'Средний': '🚀', 'Продвинутый': '🏆' };
+      levelIcon.textContent = iconMap[diagData.level] || '🌱';
+      levelName.textContent = diagData.levelDisplay || diagData.level;
+      if (retakeBtn) retakeBtn.textContent = 'Пройти заново';
+    } else {
+      levelIcon.textContent = '❔';
+      levelName.textContent = 'Диагностика не пройдена';
+      if (retakeBtn) retakeBtn.textContent = 'Пройти диагностику';
+    }
+
+    // Стрик (без изменения счётчика — он уже обновлён при заходе на сайт)
+    document.getElementById('profileStreak').textContent = getStreak();
+
+    // Уроки и слова
+    const { totalLessons, totalWords } = countCompletedLessonsAndWords();
+    document.getElementById('profileLessons').textContent = totalLessons;
+    document.getElementById('profileWords').textContent   = totalWords;
+
+    // Подсказка снизу
+    const hint = document.getElementById('profileHint');
+    if (hint) {
+      if (totalLessons === 0) {
+        hint.textContent = 'Пройди свой первый урок, чтобы статистика начала расти.';
+      } else {
+        hint.textContent = 'Продолжай заниматься каждый день, чтобы не потерять streak!';
+      }
+    }
+  }
+
+  function show() {
+    homeEls().forEach(el => { if (el) el.style.display = 'none'; });
+    // Скрываем остальные SPA-страницы на случай перехода из них
+    ['page-lessons','page-cards','page-result','page-diag','page-plan','page-review'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    pageProfile().style.display = 'block';
+    window.scrollTo(0, 0);
+    render();
+  }
+
+  function hide() {
+    pageProfile().style.display = 'none';
+    homeEls().forEach(el => { if (el) el.style.display = ''; });
+    window.scrollTo(0, 0);
+    window.dispatchEvent(new Event('scroll'));
+  }
+
+  // ── Считаем стрик сразу при загрузке страницы ──
+  updateStreak();
+
+  return { show, hide, render, updateStreak, getStreak };
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: ПОВТОРЕНИЕ (SPACED REPETITION)
+═══════════════════════════════════════════════ -->
+<div id="page-review" style="display:none;">
+  <div class="app-page">
+    <div class="app-topbar">
+      <button class="btn-back" onclick="Review.hide()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Назад
+      </button>
+      <a class="nav-logo" href="javascript:Review.hide()">danil <em>in</em> language</a>
+    </div>
+
+    <!-- LOBBY: список слов для повторения -->
+    <div id="reviewLobby" class="app-content review-lobby">
+      <p class="section-label" style="text-align:center;margin-bottom:12px;">Spaced Repetition</p>
+      <h1 class="lessons-title" id="reviewLobbyTitle">Повторение</h1>
+      <p class="lessons-sub" id="reviewLobbySub">Слова, готовые к повторению сегодня</p>
+
+      <div class="review-lobby-card" id="reviewLobbyCard">
+        <!-- наполняется JS -->
+      </div>
+    </div>
+
+    <!-- КАРТОЧКИ ПОВТОРЕНИЯ -->
+    <div id="reviewCards" class="app-content cards-content" style="display:none;">
+      <div class="cards-counter" id="reviewCounter">Слово 1 из 8</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="reviewProgressBar"></div>
+      </div>
+
+      <div class="flashcard" id="reviewFlashcard">
+        <div class="flashcard-word-row">
+          <div class="flashcard-word" id="reviewWord"></div>
+          <button class="speak-btn" id="reviewSpeakBtn" type="button" aria-label="Озвучить" title="Озвучить">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3 7v4h2.8L9.5 14V4L5.8 7H3z" fill="currentColor"/>
+              <path d="M11.5 6.2c.9.6 1.5 1.7 1.5 2.8s-.6 2.2-1.5 2.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path d="M13.3 4.3c1.6 1.1 2.6 2.9 2.6 4.7s-1 3.6-2.6 4.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+            </svg>
+          </button>
+        </div>
+        <div class="flashcard-hint">Выбери правильный перевод</div>
+      </div>
+
+      <div class="answers-grid" id="reviewAnswersGrid"></div>
+    </div>
+
+    <!-- ЭКРАН РЕЗУЛЬТАТА ПОВТОРЕНИЯ -->
+    <div id="reviewResult" class="app-content result-content" style="display:none;">
+      <div class="result-emoji" id="reviewResultEmoji">✅</div>
+      <h2 class="result-title" id="reviewResultTitle">Повторение завершено!</h2>
+      <div class="result-score" id="reviewResultScore">6 / 8</div>
+      <p class="result-sub" id="reviewResultSub"></p>
+      <div class="result-actions">
+        <button class="btn-primary" onclick="Review.hide()">
+          Готово
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ─── REVIEW (ПОВТОРЕНИЕ) PAGE ─── */
+.review-lobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.review-lobby-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-base);
+  border: 1px solid rgba(237,237,243,0.08);
+  border-radius: 24px;
+  padding: 48px 40px;
+  margin-top: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.review-ready-count {
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.review-ready-label {
+  font-size: 15px;
+  color: var(--text-dim);
+  margin-bottom: 36px;
+}
+.review-empty-emoji {
+  font-size: 56px;
+  margin-bottom: 20px;
+}
+.review-empty-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.review-empty-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+.review-stats-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.review-stat-chip {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: rgba(237,237,243,0.06);
+  border: 1px solid rgba(237,237,243,0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+.review-stat-chip strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+.review-level-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  background: rgba(82,102,235,0.14);
+  border: 1px solid rgba(82,102,235,0.25);
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+</style>
+
+<script>
+/* ═══════════════════════════════════════
+   SRS — Spaced Repetition System
+   Хранение: localStorage key "dil_srs"
+   Формат: { "en_word": { ru, level, nextDate, lastDate } }
+   level 1→1д, 2→3д, 3→7д, 4→14д, 5→выучено (не показывается)
+═══════════════════════════════════════ */
+const SRS = (() => {
+
+  const KEY = 'dil_srs';
+  const INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14 }; // дней до следующего повторения
+
+  function load() {
+    try {
+      const data = JSON.parse(localStorage.getItem(KEY) || '{}');
+      return (data && typeof data === 'object' && !Array.isArray(data)) ? data : {};
+    } catch (e) { return {}; }
+  }
+
+  function save(data) {
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) { /* игнорируем */ }
+  }
+
+  function todayStr() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function addDays(dateStr, n) {
+    const d = new Date(dateStr + 'T00:00:00');
+    d.setDate(d.getDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  // Вызывается при правильном ответе в обычном уроке: уровень 1, повторить завтра
+  function recordCorrectInLesson(en, ru) {
+    const data = load();
+    const today = todayStr();
+    const existing = data[en];
+    if (existing) {
+      // Слово уже есть в SRS — не сбрасываем прогресс при повторном прохождении урока
+      return;
+    }
+    data[en] = {
+      ru,
+      level: 1,
+      nextDate: addDays(today, INTERVALS[1]),
+      lastDate: today,
+    };
+    save(data);
+  }
+
+  // Возвращает массив слов, чей nextDate <= сегодня, level < 5
+  function getDueWords() {
+    const data = load();
+    const today = todayStr();
+    return Object.keys(data)
+      .filter(en => {
+        const w = data[en];
+        return w.level < 5 && w.nextDate <= today;
+      })
+      .map(en => ({ en, ...data[en] }));
+  }
+
+  // Возвращает статистику: { due, total, mastered }
+  function getStats() {
+    const data = load();
+    const today = todayStr();
+    let due = 0, mastered = 0, total = 0;
+    Object.values(data).forEach(w => {
+      total++;
+      if (w.level >= 5) mastered++;
+      else if (w.nextDate <= today) due++;
+    });
+    return { due, mastered, total };
+  }
+
+  // Правильный ответ в сессии повторения: level++ (макс 5)
+  function markCorrect(en) {
+    const data = load();
+    if (!data[en]) return;
+    const w = data[en];
+    const newLevel = Math.min(5, w.level + 1);
+    const today = todayStr();
+    w.level = newLevel;
+    w.lastDate = today;
+    w.nextDate = newLevel < 5 ? addDays(today, INTERVALS[newLevel]) : '9999-12-31';
+    save(data);
+  }
+
+  // Неправильный ответ: level сбрасывается до 1
+  function markWrong(en) {
+    const data = load();
+    if (!data[en]) return;
+    const w = data[en];
+    const today = todayStr();
+    w.level = 1;
+    w.lastDate = today;
+    w.nextDate = addDays(today, INTERVALS[1]);
+    save(data);
+  }
+
+  return { recordCorrectInLesson, getDueWords, getStats, markCorrect, markWrong, load };
+})();
+
+
+/* ═══════════════════════════════════════
+   REVIEW MODULE — страница "Повторение"
+═══════════════════════════════════════ */
+const Review = (() => {
+
+  const pageReview = () => document.getElementById('page-review');
+  const homeEls = () => [
+    document.getElementById('nav'),
+    document.getElementById('hero'),
+    document.getElementById('main'),
+  ];
+
+  // Состояние сессии повторения
+  let dueWords      = [];
+  let reviewIndex   = 0;
+  let reviewCorrect = 0;
+  let reviewLocked  = false;
+
+  // Все русские слова из всех программ — для генерации вариантов ответа
+  function allRuWords() {
+    const src = window.__LESSON_PROGRAMS_REF;
+    if (!src) return ['кот','собака','дом','книга','вода','огонь','солнце','луна'];
+    return Object.values(src).flatMap(prog => prog.flatMap(lesson => lesson.words.map(w => w.ru)));
+  }
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function getWrongOptions(correctRu) {
+    const pool = allRuWords().filter(r => r !== correctRu);
+    return shuffle(pool).slice(0, 3);
+  }
+
+  // ── Lobby ──
+  function renderLobby() {
+    const stats  = SRS.getStats();
+    const due    = SRS.getDueWords();
+    const card   = document.getElementById('reviewLobbyCard');
+
+    if (!card) return;
+
+    if (due.length === 0) {
+      // Нет слов для повторения сегодня
+      card.innerHTML = `
+        <div class="review-empty-emoji">🌙</div>
+        <div class="review-empty-title">Все слова повторены!</div>
+        <div class="review-empty-sub">Возвращайся завтра — новые слова будут готовы к повторению.</div>
+        <div class="review-stats-row">
+          <span class="review-stat-chip">В базе: <strong>${stats.total}</strong> слов</span>
+          <span class="review-stat-chip">Выучено: <strong>${stats.mastered}</strong></span>
+          <span class="review-stat-chip">Готово завтра: ещё скоро</span>
+        </div>`;
+    } else {
+      card.innerHTML = `
+        <div class="review-ready-count">${due.length}</div>
+        <div class="review-ready-label">слов готово к повторению</div>
+        <button class="btn-primary" onclick="Review.startSession()" style="margin:0 auto;">
+          Начать повторение
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="review-stats-row">
+          <span class="review-stat-chip">В базе: <strong>${stats.total}</strong> слов</span>
+          <span class="review-stat-chip">Выучено: <strong>${stats.mastered}</strong></span>
+        </div>`;
+    }
+  }
+
+  // ── Сессия повторения ──
+  function startSession() {
+    dueWords      = shuffle(SRS.getDueWords());
+    reviewIndex   = 0;
+    reviewCorrect = 0;
+    reviewLocked  = false;
+
+    document.getElementById('reviewLobby').style.display  = 'none';
+    document.getElementById('reviewCards').style.display  = 'flex';
+    document.getElementById('reviewResult').style.display = 'none';
+
+    renderReviewCard();
+  }
+
+  function renderReviewCard() {
+    const word    = dueWords[reviewIndex];
+    const total   = dueWords.length;
+    const counter = document.getElementById('reviewCounter');
+    const bar     = document.getElementById('reviewProgressBar');
+    const wordEl  = document.getElementById('reviewWord');
+    const grid    = document.getElementById('reviewAnswersGrid');
+    const speakBtn = document.getElementById('reviewSpeakBtn');
+
+    counter.textContent = `Слово ${reviewIndex + 1} из ${total}`;
+    bar.style.width     = `${(reviewIndex / total) * 100}%`;
+    wordEl.textContent  = word.en;
+
+    // Уровень знания рядом со словом (для наглядности)
+    const fc = document.getElementById('reviewFlashcard');
+    let badge = fc.querySelector('.review-level-badge');
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.className = 'review-level-badge';
+      fc.appendChild(badge);
+    }
+    badge.textContent = `Уровень ${word.level}`;
+
+    // Озвучка
+    if (speakBtn) {
+      speakBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (typeof window.speakEnglishWord === 'function') window.speakEnglishWord(word.en, speakBtn);
+      };
+    }
+
+    // Варианты ответа
+    const options = shuffle([word.ru, ...getWrongOptions(word.ru)]);
+    grid.innerHTML = '';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className   = 'answer-btn';
+      btn.textContent = opt;
+      btn.onclick     = () => handleReviewAnswer(btn, opt, word, options, grid);
+      grid.appendChild(btn);
+    });
+
+    reviewLocked = false;
+  }
+
+  function handleReviewAnswer(btn, chosen, word, options, grid) {
+    if (reviewLocked) return;
+    reviewLocked = true;
+
+    const allBtns = grid.querySelectorAll('.answer-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    const isCorrect = chosen === word.ru;
+    if (isCorrect) {
+      btn.classList.add('correct');
+      reviewCorrect++;
+      SRS.markCorrect(word.en); // уровень повышается
+    } else {
+      btn.classList.add('wrong');
+      allBtns.forEach(b => { if (b.textContent === word.ru) b.classList.add('correct'); });
+      SRS.markWrong(word.en); // уровень сбрасывается до 1
+    }
+
+    const delay = isCorrect ? 900 : 1500;
+    setTimeout(() => advanceReviewCard(), delay);
+  }
+
+  function advanceReviewCard() {
+    const fc = document.getElementById('reviewFlashcard');
+    fc.classList.add('flip-out');
+    setTimeout(() => {
+      reviewIndex++;
+      if (reviewIndex >= dueWords.length) {
+        showReviewResult();
+        return;
+      }
+      fc.classList.remove('flip-out');
+      fc.classList.add('in-from');
+      renderReviewCard();
+      requestAnimationFrame(() => requestAnimationFrame(() => fc.classList.remove('in-from')));
+    }, 220);
+  }
+
+  function showReviewResult() {
+    document.getElementById('reviewCards').style.display  = 'none';
+    document.getElementById('reviewResult').style.display = 'flex';
+
+    const total = dueWords.length;
+    const pct   = reviewCorrect / total;
+    const emoji = document.getElementById('reviewResultEmoji');
+    const title = document.getElementById('reviewResultTitle');
+    const sub   = document.getElementById('reviewResultSub');
+
+    document.getElementById('reviewResultScore').textContent = `${reviewCorrect} / ${total}`;
+    document.getElementById('reviewProgressBar').style.width = '100%';
+
+    if (pct === 1) {
+      emoji.textContent = '🏆'; title.textContent = 'Идеальное повторение!';
+      sub.textContent   = 'Все слова отвечены правильно. Их уровень знания повышен!';
+    } else if (pct >= 0.7) {
+      emoji.textContent = '✅'; title.textContent = 'Отличная работа!';
+      sub.textContent   = 'Большинство слов запомнено. Уровни обновлены.';
+    } else {
+      emoji.textContent = '💪'; title.textContent = 'Нужна практика!';
+      sub.textContent   = 'Некоторые слова сброшены на уровень 1 — встретишь их снова завтра.';
+    }
+  }
+
+  // ── Навигация ──
+  function show() {
+    homeEls().forEach(el => { if (el) el.style.display = 'none'; });
+    ['page-lessons','page-cards','page-result','page-diag','page-plan','page-profile'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    // Сбрасываем до лобби
+    document.getElementById('reviewLobby').style.display  = 'flex';
+    document.getElementById('reviewCards').style.display  = 'none';
+    document.getElementById('reviewResult').style.display = 'none';
+
+    pageReview().style.display = 'block';
+    window.scrollTo(0, 0);
+    renderLobby();
+  }
+
+  function hide() {
+    pageReview().style.display = 'none';
+    homeEls().forEach(el => { if (el) el.style.display = ''; });
+    window.scrollTo(0, 0);
+    window.dispatchEvent(new Event('scroll'));
+  }
+
+  return { show, hide, startSession };
+})();
+</script>
+</body>
+</html>
